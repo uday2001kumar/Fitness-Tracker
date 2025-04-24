@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness Tracker</title>
+    <style>
+        body {
+            background: url('static/images/uday.jpg') no-repeat center center/cover;
+            color: rgb(7, 7, 7);
+            font-family: 'Poppins', sans-serif;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.386);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .glass-box {
+            padding: 30px;
+            width: 80%;
+            text-align: center;
+            position: relative;
+        }
+        .title {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #060606;
+        }
+        .description {
+            margin-top: 10px;
+            font-size: 1.2rem;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .feature {
+            background: rgba(255, 255, 255, 0.589);
+            padding: 20px;
+            border-radius: 15px;
+        }
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #facc15;
+        }
+        .feature-description {
+            margin-top: 10px;
+        }
+        .button1 {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: #facc15;
+            color: black;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .button1:hover {
+            background: #eab308;
+        }
+        .logout-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 15px;
+            background: red;
+            color: white;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+        }
+        .logout-button:hover {
+            background: darkred;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="glass glass-box">
+            <a href="{% url 'logout' %}" class="logout-button">Logout</a>
+            <h1 class="title">Fitness Tracker</h1>
+            <p class="description">Track your workouts, nutrition, and progress seamlessly.</p>
+            
+            <div class="grid">
+                <div class="feature">
+                    <h2 class="feature-title">🏋️ Workout Tracking</h2>
+                    <p class="feature-description">Log exercises, track progress, and view past workouts.</p>
+                    <a href="{% url 'workouthome' %}" class="button1">Start Now</a>
+                </div>
+                <div class="feature">
+                    <h2 class="feature-title">🍎 Nutrition Tracking</h2>
+                    <p class="feature-description">Monitor your meals, calories, and macronutrients.</p>
+                    <a href="{% url 'nutrition_home' %}" class="button1">Track Nutrition</a>
+                </div>
+                <div class="feature">
+                    <h2 class="feature-title">👤 Profile Management</h2>
+                    <p class="feature-description">Update personal details, fitness goals, and achievements.</p>
+                    <a href="{% url 'profile' %}" class="button1">Edit Profile</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

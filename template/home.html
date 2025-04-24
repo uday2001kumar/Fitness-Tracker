@@ -1,0 +1,77 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background-image: url("{% static 'images/n1.avif' %}");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center center;
+        height: 100vh;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .simple-hero {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .simple-hero .content-box {
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 20px;
+        padding: 40px 50px;
+        max-width: 550px;
+        width: 100%;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    }
+
+    .simple-hero h1 {
+        font-size: 2.8rem;
+        color: #ffffff;
+        margin-bottom: 20px;
+        font-weight: 700;
+        text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    .simple-hero p {
+        font-size: 1.2rem;
+        color: #eeeeee;
+        margin-bottom: 30px;
+    }
+
+    .simple-hero a.btn {
+        background: linear-gradient(to right, #66a6ff, #89f7fe);
+        color: #fff;
+        text-decoration: none;
+        padding: 12px 30px;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: 30px;
+        transition: background 0.3s ease;
+    }
+
+    .simple-hero a.btn:hover {
+        background: linear-gradient(to right, #5586dd, #70d9f4);
+    }
+</style>
+
+<main>
+    <section class="simple-hero">
+        <div class="content-box">
+            <h1>Track Your Fitness Journey</h1>
+            <p>Stay fit and healthy by tracking your workouts and nutrition.</p>
+            <a href="{% url 'signup' %}" class="btn">Get Started</a>
+        </div>
+    </section>
+</main>
+{% endblock %}

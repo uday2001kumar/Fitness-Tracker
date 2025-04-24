@@ -1,0 +1,214 @@
+{% extends 'nutrition/nutrition_base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="nutrition-bg">
+    <div class="nutrition-container">
+        <h2>Your Nutrition Records</h2>
+
+        <!-- Date Search Form -->
+        <div class="date-search-container">
+            <form method="GET" action="" class="date-search-form">
+                <label for="search_date" class="search-label">Search by Date:</label>
+                <input type="date" name="search_date" id="search_date" value="{{ search_date|date:'Y-m-d' }}" class="date-input">
+                <button type="submit" class="search-button">Search</button>
+            </form>
+        </div>
+
+        {% if data %}
+            <table class="nutrition-table">
+                <thead>
+                    <tr>
+                        <th>S. No</th>
+                        <th>Food Item</th>
+                        <th>Goal Type</th>
+                        <th>Servings</th>
+                        <th>Date Added</th>
+                        <th>Time</th>
+                        <th>Gain Calories</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in data %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ item.food_item }}</td>
+                            <td>{{ item.goal_type }}</td>
+                            <td>{{ item.servings }}</td>
+                            <td>{{ item.date_added|date:"Y-m-d" }}</td>
+                            <td>{{ item.date_added|date:"h:i A" }}</td>
+                            <td>{{ item.total_calories }}</td>
+                            <td><a href="{% url 'delete_nutrition' pk=item.id %}" class="delete-link">Delete</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="no-records-message">No nutrition records found for the selected date.</p>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+/* Fullscreen Background */
+.nutrition-bg {
+    background: url("{% static 'images/nutritions/img3.jpg' %}") no-repeat center center fixed;
+    background-size: cover;
+    min-height: 100vh;
+    padding: 40px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Glassy Container */
+.nutrition-container {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 30px;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 1000px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Header */
+.nutrition-container h2 {
+    text-align: center;
+    font-size: 36px;
+    margin-bottom: 25px;
+    color: #fff;
+}
+
+/* Date Search Form */
+.date-search-container {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.date-search-form {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 10px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.search-label {
+    color: #fff;
+    font-size: 16px;
+}
+
+.date-input {
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.8);
+    color: #333;
+}
+
+.search-button {
+    padding: 10px 20px;
+    background-color: #00c853;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.search-button:hover {
+    background-color: #00b248;
+}
+
+/* Table Design */
+.nutrition-table {
+    width: 100%;
+    border-collapse: collapse;
+    overflow: hidden;
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.85);
+    color: #000;
+}
+
+.nutrition-table th,
+.nutrition-table td {
+    padding: 14px 18px;
+    text-align: left;
+}
+
+.nutrition-table th {
+    background-color: #00c853;
+    color: #fff;
+    font-weight: bold;
+}
+
+.nutrition-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.nutrition-table tr:hover {
+    background-color: #e0f7fa;
+}
+
+/* Action Link */
+.delete-link {
+    background-color: #e53935;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.delete-link:hover {
+    background-color: #c62828;
+}
+
+/* No Records Found Message */
+.no-records-message {
+    text-align: center;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .nutrition-container {
+        padding: 20px;
+    }
+
+    .nutrition-table th,
+    .nutrition-table td {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .nutrition-container h2 {
+        font-size: 26px;
+    }
+
+    .date-search-form {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .search-button {
+        width: 100%;
+    }
+}
+</style>
+
+{% endblock %}
+    

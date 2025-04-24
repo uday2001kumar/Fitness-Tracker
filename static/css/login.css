@@ -1,0 +1,61 @@
+ /* 🚀 Navbar */
+ .navbar {
+    background: rgba(0, 0, 0, 0.9);
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ff5733 !important;
+}
+
+.navbar-nav .nav-link {
+    font-size: 1.1rem;
+    color: white !important;
+    margin-right: 15px;
+    transition: 0.3s ease-in-out;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #ff5733 !important;
+}
+
+/* 🚀 Login Form */
+.container{
+    margin-top: 7px;
+}
+.login-container {
+    max-width: 400px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    margin: auto;
+    margin-top: 170px;
+}
+
+.login-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.btn-primary {
+    background-color: #ff5733;
+    border: none;
+    width: 100%;
+}
+
+.btn-primary:hover {
+    background-color: #d14a2f;
+}
+
+/* 🚀 Footer */
+footer {
+    background: #222;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}

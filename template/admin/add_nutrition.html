@@ -1,0 +1,120 @@
+{% extends 'admin/admin_base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="nutrition-form-container">
+    <h2 class="form-title">Add Nutrition</h2>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" style="color: #2e7d32;text-align: center;">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="POST" enctype="multipart/form-data" class="nutrition-form">
+        {% csrf_token %}
+        
+        <!-- Food Name -->
+        <label for="food_name">Food Name</label>
+        <input type="text" name="food_name" class="form-control" placeholder="Food Name" required>
+
+        <!-- Goal Type (Category) -->
+        <label for="goal_type">Category</label>
+        <select name="goal_type" class="form-control" required>
+            <option value="Weight Loss">Weight Loss</option>
+            <option value="Weight Gain">Weight Gain</option>
+            <option value="General Fitness">General Fitness</option>
+        </select>
+
+        <!-- Calories per serving -->
+        <label for="calories_per_serving">Calories per Serving</label>
+        <input type="number" step="0.01" name="calories_per_serving" placeholder="Calories" class="form-control" required>
+
+        <!-- Protein -->
+        <label for="protein">Protein (g)</label>
+        <input type="number" step="0.01" name="protein" placeholder="Proteins" class="form-control">
+
+        <!-- Carbs -->
+        <label for="carbs">Carbs (g)</label>
+        <input type="number" step="0.01" name="carbs" placeholder="Carbohydates" class="form-control">
+
+        <!-- Fats -->
+        <label for="fats">Fats (g)</label>
+        <input type="number" step="0.01" name="fats" placeholder="Fat" class="form-control">
+
+        <!-- Image -->
+        <label for="image">Food Image</label>
+        <input type="file" name="image" class="form-control">
+
+        <!-- Description -->
+        <label for="description">Description</label>
+        <textarea name="description" rows="4" class="form-control" placeholder="Description related food"></textarea>
+
+        <button type="submit" class="submit-btn">Add Nutrition</button>
+    </form>
+</div>
+
+<style>
+    body {
+        background: linear-gradient(to right, #e3f2fd, #f1f8e9);
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .nutrition-form-container {
+        max-width: 600px;
+        background-color: #fff;
+        margin: 50px auto;
+        padding: 30px 40px;
+        border-radius: 15px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-title {
+        text-align: center;
+        color: #2e7d32;
+        font-weight: bold;
+        margin-bottom: 25px;
+    }
+
+    .nutrition-form label {
+        font-weight: 600;
+        margin-top: 15px;
+        display: block;
+        color: #333;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px 12px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        background-color: #f9f9f9;
+        transition: 0.3s ease-in-out;
+    }
+
+    .form-control:focus {
+        border-color: #4caf50;
+        background-color: #fff;
+        box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+        outline: none;
+    }
+
+    .submit-btn {
+        margin-top: 25px;
+        background: linear-gradient(to right, #66bb6a, #43a047);
+        color: #fff;
+        font-weight: bold;
+        border: none;
+        padding: 12px;
+        width: 100%;
+        border-radius: 12px;
+        transition: 0.3s ease;
+    }
+
+    .submit-btn:hover {
+        background: linear-gradient(to right, #43a047, #2e7d32);
+        cursor: pointer;
+    }
+</style>
+{% endblock %}

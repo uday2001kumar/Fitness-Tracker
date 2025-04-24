@@ -1,0 +1,80 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block content %}
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #f9fbe7, #e0f7fa); /* Soft yellow-green to sky blue */
+    }
+
+    .about-section {
+        min-height: 90vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 50px 20px;
+    }
+
+    .about-card {
+        background: #ffffff;
+        color: #333;
+        border-radius: 20px;
+        padding: 40px;
+        max-width: 850px;
+        width: 100%;
+        box-shadow: 0 4px 25px rgba(0, 0, 0, 0.1);
+        border: 2px solid #b2dfdb; /* Teal border */
+    }
+
+    .about-card h2 {
+        font-size: 36px;
+        margin-bottom: 25px;
+        color: #009688; /* Teal */
+        text-align: center;
+    }
+
+    .about-card p {
+        font-size: 18px;
+        line-height: 1.8;
+        margin-bottom: 20px;
+        text-align: justify;
+        color: #444;
+    }
+
+    .about-card strong {
+        color: #f57c00; /* Orange accent */
+    }
+
+    @media screen and (max-width: 768px) {
+        .about-card {
+            padding: 25px;
+        }
+
+        .about-card h2 {
+            font-size: 28px;
+        }
+
+        .about-card p {
+            font-size: 16px;
+        }
+    }
+</style>
+
+
+<div class="about-section">
+    <div class="about-card">
+        <h2>About Fitness Tracker</h2>
+        <p>
+            Welcome to <strong>Fitness Tracker</strong>, your all-in-one companion for monitoring your health and well-being.
+            Our platform helps you stay consistent with your workouts, track nutrition, and visualize your progress.
+        </p>
+        <p>
+            Whether you're working toward weight loss, muscle gain, or just living a healthy lifestyle, we've got features tailored for every goal.
+        </p>
+        <p><strong>Start your fitness transformation today and make every rep count! 💪🔥</strong></p>
+    </div>
+</div>
+
+{% endblock %}

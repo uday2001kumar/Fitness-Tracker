@@ -1,0 +1,169 @@
+{% extends 'workout/base_work.html' %}
+{% load static %}
+{% block content %}
+
+<!-- 🔥 Fullscreen Video Background -->
+<div class="video-bg">
+    <video autoplay muted loop playsinline>
+        <source src="{% static 'images/Workouts/workout4.mp4' %}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+</div>
+
+<!-- Workout Form Section -->
+<div class="add_workout">
+    <div class="form-bg">
+        <div class="form-glass">
+            <h2>Add New Workout</h2>
+            
+            {% if messages %}
+                {% for i in messages %}
+                    <p class="success-msg">{{ i }}🔥</p>
+                {% endfor %}
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <label for="workout_type">Workout Type:</label>
+                <select id="workout_type" name="workout_type" required>
+                    <option value="">-- Select Type --</option>
+                    <option value="weight_loss">Weight Loss</option>
+                    <option value="weight_gain">Weight Gain</option>
+                </select>
+
+                <label for="workout_name">Workout Name:</label>
+                <select id="workout_name" name="workout_name" required>
+                    <option value="">-- Select Workout --</option>
+
+                    <optgroup label="Weight Loss Workouts" id="loss-options">
+                        {% for workout in weight_loss_workouts %}
+                            <option value="{{ workout.workout_name }}">{{ workout.workout_name }}</option>
+                        {% empty %}
+                            <option disabled>No weight loss workouts available</option>
+                        {% endfor %}
+                    </optgroup>
+
+                    <optgroup label="Weight Gain Workouts" id="gain-options">
+                        {% for workout in weight_gain_workouts %}
+                            <option value="{{ workout.workout_name }}">{{ workout.workout_name }}</option>
+                        {% empty %}
+                            <option disabled>No weight gain workouts available</option>
+                        {% endfor %}
+                    </optgroup>
+                </select>
+
+                <label for="duration">Duration (minutes):</label>
+                <input type="number" id="duration" name="duration" placeholder="Enter Duration" required>
+
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date" required>
+
+                <button type="submit">Save Workout</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- JS to Filter Workout Options -->
+<script>
+    const workoutType = document.getElementById("workout_type");
+    const lossOptions = document.getElementById("loss-options");
+    const gainOptions = document.getElementById("gain-options");
+
+    function filterWorkoutOptions() {
+        const type = workoutType.value;
+        lossOptions.style.display = type === "weight_loss" ? "block" : "none";
+        gainOptions.style.display = type === "weight_gain" ? "block" : "none";
+    }
+
+    workoutType.addEventListener("change", filterWorkoutOptions);
+    document.addEventListener("DOMContentLoaded", filterWorkoutOptions);
+</script>
+
+<!-- Styling -->
+<style>
+/* 🎬 Fullscreen Video Background */
+.video-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.video-bg video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Form Container */
+.add_workout {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+    padding: 20px;
+    box-sizing: border-box;
+    color: #fff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+} 
+
+.form-glass h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #ffcc00;
+    font-size: 32px;
+}
+
+.form-glass label {
+    font-weight: bold;
+    margin-top: 15px;
+    display: block;
+}
+
+.form-glass input,
+.form-glass select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 8px;
+    margin-bottom: 18px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #000;
+}
+
+.form-glass button {
+    width: 100%;
+    padding: 12px;
+    background-color: #ffcc00;
+    color: #000;
+    font-weight: bold;
+    font-size: 18px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.form-glass button:hover {
+    background-color: #e6b800;
+}
+
+.success-msg {
+    color: #00ff99;
+    font-size: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+</style>
+
+{% endblock %}

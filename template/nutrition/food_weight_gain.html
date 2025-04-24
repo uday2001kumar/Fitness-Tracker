@@ -1,0 +1,111 @@
+{% extends 'nutrition/nutrition_base.html' %}
+{% load static %}
+
+{% block content %}
+  <h1 class="title">Top Foods for Weight Gain</h1>
+  <div class="food-grid">
+    {% for food in food_weight_gain %}
+      <div class="food-card">
+        <img src="{{ food.image.url }}" alt="{{ food.name }}">
+        <h2>{{ food.name }}</h2>
+        <div class="nutrients">
+          <p><strong>Calories:</strong> {{ food.calories_per_serving }} kcal</p>
+          <p><strong>Protein:</strong> {{ food.protein }}g</p>
+          <p><strong>Carbohydrates:</strong> {{ food.carbs }}g</p>
+          <p><strong>Fats:</strong> {{ food.fats }}g</p>
+        </div>
+        <p class="desc">{{ food.description }}</p>
+      </div>
+    {% endfor %}
+  </div>
+
+  <style>
+    body {
+      background: #f4f7f6;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    .title {
+      text-align: center;
+      color: #2e7d32;
+      font-size: 2.5rem;
+      margin: 40px 0 30px;
+    }
+
+    .food-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      padding: 0 20px 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .food-card {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      transition: 0.3s;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    .food-card:hover {
+      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+      transform: translateY(-5px);
+    }
+
+    .food-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+
+    .food-card h2 {
+      font-size: 1.3rem;
+      color: #388e3c;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .nutrients {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #444;
+      padding: 5px 0;
+    }
+
+    .nutrients p {
+      margin: 4px 0;
+    }
+
+    .desc {
+      font-size: 0.9rem;
+      color: #555;
+      margin-top: 10px;
+      text-align: justify;
+      flex-grow: 1;
+    }
+
+    @media (max-width: 600px) {
+      .title {
+        font-size: 2rem;
+      }
+      .food-card {
+        padding: 12px;
+      }
+      .food-card h2 {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+{% endblock %}

@@ -1,0 +1,138 @@
+{% extends 'nutrition/nutrition_base.html' %}
+{% load static %}
+{% block content %}
+<style>
+    .video-bg {
+        position: fixed;
+        top: 0;
+        min-height: 100vh;
+        z-index: 0;
+        object-fit: cover;
+        filter: brightness(1);
+    }
+
+    .glass-container {
+        padding: 1.5rem;
+        border-radius: 15px;
+        box-shadow: 0 6px 24px rgba(0, 255, 170, 0.25);
+        color: black;
+        max-width: 95%;
+        margin: 2rem auto;
+        position: relative;
+        z-index: 1;
+    }
+
+    .card {
+        flex: 1 1 160px;
+        border-radius: 15px;
+        padding: 0.8rem 1rem;
+        color: black;
+        box-shadow: 0 3px 16px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(0, 255, 170, 0.25);
+        transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+    }
+
+    .card1 {
+        background:rgba(200, 45, 45, 0.875); /* Pink to light peach */
+    }
+
+    .card2 {
+        background:rgba(0, 128, 0, 0.784); /* Lavender to pink */
+    }
+
+    .card3 {
+        background: rgba(255, 166, 0, 0.87); /* Yellow to orange */
+    }
+
+    .card4 {
+        background:rgba(210, 0, 213, 0.833); /* Mint green to sky blue */
+    }
+
+    .card5 {
+        background: white; /* Gray-blue gradient */
+    }
+    .card6 {
+        background: skyblue; /* Gray-blue gradient */
+    }
+
+    h1 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        color: black;
+        text-align: center;
+    }
+
+    h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #000;
+        margin-bottom: 0.3rem;
+    }
+
+    p {
+        font-size: 1rem;
+        font-weight: 500;
+        color: black;
+        margin: 0;
+    }
+
+    .dashboard-flex {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-top: 1.5rem;
+        justify-content: center;
+    }
+</style>
+
+<video autoplay muted loop class="video-bg">
+    <source src="{% static 'images/nutritions/nutrition3.mp4' %}" type="video/mp4">
+    Your browser does not support HTML5 video.
+</video>
+
+<div class="glass-container">
+    <h1>Nutrition Dashboard</h1>
+
+    <div class="dashboard-flex">
+        <div class="card card1">
+            <h3>🥗 Total Nutrition Logs</h3>
+            <p>{{ total_nutritions }}</p>
+        </div>
+
+        <div class="card card2">
+            <h3>✅ Consumed Today</h3>
+            <p>{{ consumed_today }}</p>
+        </div>
+
+        <div class="card card3">
+            <h3>🔥 Calories Consumed</h3>
+            <p>{{ calories_consumed_today }} kcal</p>
+        </div>
+
+        <div class="card card6">
+            <h3>🎯 Goal</h3>
+        <p>{{ calories_consumed_today }}/2500 kcal</p>
+
+        </div>
+        
+        <div class="card card4">
+            <h3>🗓️ Date</h3>
+            <p>{{ today|date:"F j, Y" }}</p>
+        </div>
+    </div>
+
+    <div class="dashboard-flex">
+        <div class="card card5" style="flex: 1;">
+            <h3>Total Meals</h3>
+            <p>{{ total_meals_today }}</p>
+            <p>{{ nutrition_type_today }}</p>
+            <h3 style="margin-top: 0.8rem;">Avg. Calories / Meal</h3>
+            <p>{{ avg_calories }} kcal</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

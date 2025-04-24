@@ -1,0 +1,108 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    background: url("{% static 'images/Workouts/workout1.jpg' %}") no-repeat center center fixed;
+    background-size: cover;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .admin-hero {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .admin-card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+    padding: 35px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  }
+
+  .admin-card h3 {
+    color: #ffffff;
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .admin-card .form-label {
+    color: #ffffff;
+    font-weight: 600;
+    margin-bottom: 5px;
+  }
+
+  .admin-card .form-control {
+    border-radius: 10px;
+    border: none;
+    padding: 12px;
+    font-size: 15px;
+    background: rgba(255, 255, 255, 0.75);
+    color: #333;
+  }
+
+  .admin-card .form-control::placeholder {
+    color: #666;
+  }
+
+  .admin-card .btn {
+    background: linear-gradient(to right, #66a6ff, #89f7fe);
+    border: none;
+    font-weight: bold;
+    font-size: 16px;
+    padding: 12px;
+    border-radius: 10px;
+    color: #fff;
+    transition: background 0.4s ease;
+  }
+
+  .admin-card .btn:hover {
+    background: linear-gradient(to right, #89f7fe, #66a6ff);
+  }
+
+  .text-danger {
+    font-weight: 600;
+    color: #ff5252;
+  }
+</style>
+
+<div class="admin-hero">
+  <div class="container d-flex justify-content-center align-items-center" style="height: 100%;">
+    <div class="admin-card">
+      <h3>Admin Login</h3>
+      {% if messages %}
+          {% for i in messages %}
+            <p style="text-align: center;color: yellow;font-size: 20px;">{{i}}</p>
+          {% endfor %}
+        {% endif %}
+      <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="username" class="form-label">Username</label>
+          <input type="text" class="form-control" id="username" name="username" placeholder="Enter Username" required>
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password" required>
+        </div>
+        <button type="submit" class="btn w-100">Login</button>
+        {% if error %}
+        <div class="text-danger text-center mt-3">{{ error }}</div>
+        {% endif %}
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

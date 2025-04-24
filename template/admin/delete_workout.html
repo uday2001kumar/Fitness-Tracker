@@ -1,0 +1,141 @@
+{% extends 'admin/admin_base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center fw-bold mb-4" style="color: #ffcc00;">🏋️ Manage All Workouts</h2>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} text-center shadow-sm">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover workout-table shadow">
+            <thead class="table-dark text-center">
+                <tr>
+                    <th>Photo</th>
+                    <th>Workout Name</th>
+                    <th>Category</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody class="align-middle text-center">
+                {% for workout in workouts %}
+                <tr class="workout-row">
+                    <td>
+                        {% if workout.image %}
+                            <img src="{{ workout.image.url }}" alt="Workout Image" class="workout-img-thumbnail">
+                        {% else %}
+                            <img src="{% static 'images/default_workout.png' %}" alt="Default" class="workout-img-thumbnail">
+                        {% endif %}
+                    </td>
+                    <td class="fw-semibold">{{ workout.workout_name }}</td>
+                    <td>
+                        <span class="badge {% if workout.category == 'loss' %}bg-warning{% else %}bg-success{% endif %}">
+                            Weight {{ workout.get_category_display }}
+                        </span>
+                    </td>
+                    <td>
+                        <a href="{% url 'delete_workout' pk=workout.id %}" class="btn btn-sm btn-outline-danger"
+                           onclick="return confirm('Are you sure you want to delete this workout?')">
+                            <i class="fas fa-trash-alt"></i> Delete
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-muted">No workouts found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+body {
+    background-color: #121212;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+h2 {
+    letter-spacing: 1px;
+}
+
+.table {
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 1rem;
+    width: 100%;
+    background-color: #1f1f1f;
+}
+
+.table th, .table td {
+    vertical-align: middle !important;
+    padding: 14px;
+    text-align: center;
+    font-size: 0.95rem;
+}
+
+.workout-img-thumbnail {
+    width: 80px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid #ffcc00;
+    transition: transform 0.2s ease;
+}
+
+.workout-img-thumbnail:hover {
+    transform: scale(1.05);
+}
+
+.workout-row {
+    transition: background-color 0.3s ease;
+}
+
+.workout-row:hover {
+    background-color: #2b2b2b;
+}
+
+.badge {
+    font-size: 0.9rem;
+    padding: 6px 14px;
+    border-radius: 30px;
+}
+.btn-outline-danger {
+    font-size: 0.85rem;
+    padding: 5px 12px;
+    border-radius: 8px;
+    border: 1px solid #dc3545;
+    color: #dc3545;
+}
+
+.btn-outline-danger:hover {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.alert {
+    font-weight: 500;
+    font-size: 0.95rem;
+    border-radius: 10px;
+}
+
+td {
+    color: #f0f0f0;
+}
+
+a {
+    color: #dc3545;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+</style>
+{% endblock %}

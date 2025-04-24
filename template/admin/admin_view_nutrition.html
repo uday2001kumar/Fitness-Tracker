@@ -1,0 +1,159 @@
+{% extends 'admin/admin_base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-4">
+    <h2 class="text-center fw-bold mb-4">Nutrition Items</h2>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="nutrition-grid">
+        {% for item in nutrition %}
+        <div class="card">
+            <div class="card-image">
+                {% if item.image %}
+                    <img src="{{ item.image.url }}" alt="{{ item.name }}">
+                {% else %}
+                    <div class="no-img">No Image</div>
+                {% endif %}
+            </div>
+            <div class="card-body">
+                <h4>{{ item.name }}</h4>
+
+                <p class="category 
+                    {% if item.goal_type == 'Weight Loss' %}weight_loss
+                    {% elif item.goal_type == 'Weight Gain' %}weight_gain
+                    {% else %}general_fitness{% endif %}">
+                    {{ item.goal_type }}
+                </p>
+
+                <p><strong>Type:</strong> {{ item.nutrition_type }}</p>
+                <p><strong>Calories:</strong> {{ item.calories_per_serving }} kcal/serving</p>
+                <p><strong>Protein:</strong> {{ item.protein }} g</p>
+                <p><strong>Carbs:</strong> {{ item.carbs }} g</p>
+                <p><strong>Fats:</strong> {{ item.fats }} g</p>
+                <p class="desc"><strong>Description:</strong> {{ item.description }}</p>
+                
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-muted">No nutrition items available.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+
+
+    .nutrition-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 25px;
+        justify-content: center;
+    }
+
+    .card {
+        width: 290px;
+        background: #ffffff;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+        transition: transform 0.25s ease;
+        display: flex;
+        color: #555;
+        flex-direction: column;
+    }
+
+    .card:hover {
+        transform: translateY(-6px);
+    }
+
+    .card-image img,
+    .no-img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .no-img {
+        background: #e0e0e0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #777;
+        font-size: 16px;
+        font-weight: 500;
+    }
+
+    .card-body {
+        padding: 18px 16px;
+        text-align: center;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .card-body h4 {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .card-body p {
+        margin: 4px 0;
+        font-size: 14px;
+    }
+
+    .desc {
+        font-size: 13px;
+        color: #555;
+        margin-top: 10px;
+    }
+
+    .category {
+        display: inline-block;
+        padding: 5px 12px;
+        border-radius: 30px;
+        font-size: 12px;
+        font-weight: 500;
+        margin-bottom: 8px;
+        color: #fff;
+    }
+
+    .weight_loss {
+        background-color: #fcf9f9;
+        color: black;
+    }
+
+    .weight_gain {
+        color: black;
+    }
+
+    .general_fitness {
+        background-color: #1e88e5;
+    }
+
+    .btn-delete {
+        margin-top: 12px;
+        background-color: transparent;
+        border: 1px solid #e53935;
+        color: #e53935;
+        padding: 6px 12px;
+        font-size: 14px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-delete:hover {
+        background-color: #e53935;
+        color: #fff;
+        cursor: pointer;
+    }
+</style>
+{% endblock %}

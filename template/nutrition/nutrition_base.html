@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% load static %}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nutrition Tracking</title>
+  <link rel="stylesheet" href="{% static 'css/nutrition.css' %}">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      display: flex;
+      height: 100vh;
+      background: linear-gradient(to right, #f0f4f7, #b3cde0); /* Soft pastel gradient */
+      flex-direction: column;
+    }
+
+    .container {
+      display: flex;
+      flex: 1;
+      flex-direction: row;
+      width: 100%;
+      height: 100%;
+    }
+
+    nav {
+      width: 17%; /* Sidebar width reduced to 20% */
+      background: #2c3e50; /* Darker sidebar color */
+      padding: 2rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2.0rem;
+      height: 100vh;
+      color: #fff;
+      box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+      position: fixed;
+      top: 0;
+      left: 0;
+    }
+
+    /* Profile Container */
+    .profile-container {
+      text-align: center;
+    }
+
+    .profile-container img {
+      width: 120px; /* Adjusted profile image size */
+      height: 120px;
+      border-radius: 50%;
+      border: 4px solid #ffcc00;
+      object-fit: cover;
+    }
+
+    .profile-container p {
+      font-weight: bold;
+      font-size: 1.1rem;
+      color: #ffcc00; /* Yellow text for profile name */
+      margin-top: 1rem;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #fff; /* White for nav links */
+      font-size: 1.2rem;
+      padding: 0.8rem 1rem;
+      border-radius: 10px;
+      transition: background 0.3s ease, color 0.3s ease;
+      display: block;
+    }
+
+    nav a:hover {
+      background-color: #ffcc00; /* Yellow on hover */
+      color: #333; /* Dark text on hover */
+    }
+
+    .right {
+      margin-left: 17%; /* Space for the sidebar */
+      width: 83%; /* Content section */
+      background: #fff;
+      overflow-y: auto;
+      box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .right::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .right::-webkit-scrollbar-thumb {
+      background-color: #ccc;
+      border-radius: 4px;
+    }
+
+    /* Responsive Layout for Mobile */
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+
+      nav {
+        width: 100%; /* Sidebar becomes top navigation */
+        height: auto;
+        position: relative;
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 1rem;
+      }
+
+      .profile-container {
+        margin-bottom: 1rem;
+      }
+
+      .profile-container img {
+        width: 80px; /* Smaller profile image */
+        height: 80px;
+      }
+
+      .profile-container p {
+        font-size: 1rem;
+      }
+
+      .right {
+        margin-left: 0;
+        width: 100%; /* Full width for content */
+      }
+
+      nav a {
+        font-size: 1rem; /* Slightly smaller font for navigation links */
+        padding: 0.5rem 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav>
+      <!-- Profile at top of sidebar -->
+
+
+      <!-- Nav links -->
+      <a href="{% url 'nutrition_home' %}">🏠 Home</a>
+      <a href="{% url 'nutritions' %}">🍎 Nutritions</a>
+      <a href="{% url 'add_nutrition' %}">➕ Add New Meal</a>
+      <a href="{% url 'view_nutrition' %}">📅 View Past Meals</a>
+      <a href="{% url 'weekly_progress' %}">📊 Weekly Progress</a>
+      <a href="{% url 'suggesionsn' %}" class="nav-link"><span> 📝</span> Nutritionist</a>
+      <a href="{% url 'home' %}">🔓 LogOut</a>
+    </nav>
+
+    <div class="right">
+      {% block content %}
+      <!-- Page-specific content here -->
+      {% endblock %}
+    </div>
+  </div>
+</body>
+</html>

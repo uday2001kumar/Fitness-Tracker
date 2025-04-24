@@ -1,0 +1,150 @@
+{% extends 'profile.html' %}
+{% block content %}
+
+<div class="metrics-container">
+    <div class="title">Body Composition Report</div>
+
+    <div class="metrics-grid">
+        <div class="metric-card">
+            <strong>Body Weight</strong>
+            <span>{{ weight }} kg</span>
+        </div>
+
+        <div class="metric-card">
+            <strong>Body Height</strong>
+            <span>{{ height }} cm</span>
+        </div>
+        <div class="metric-card">
+            <strong>Standard Weight</strong>
+            <span>{{ standard_weight }} kg</span>
+        </div>
+        <div class="metric-card">
+            <strong>Weight Control</strong>
+            <span>{{ control_status }}</span>
+        </div>
+        <div class="metric-card">
+            <strong>Fat Mass</strong>
+            <span>{{ fat_mass }} kg</span>
+        </div>
+        <div class="metric-card">
+            <strong>BMI STATUS</strong>
+            <span>{{ bmi_status }}</span>
+        </div>
+
+        <div class="metric-card">
+            <strong>BMI</strong>
+            <span>{{ bmi }}</span>
+        </div>
+
+        <div class="metric-card">
+            <strong>BMR</strong>
+            <span>{{ bmr }}</span>
+        </div>
+        <div class="metric-card">
+            <strong>BMR STATUS</strong>
+            <span>{{ bmr_status }}</span>
+        </div>
+        <div class="metric-card">
+            <strong>FAT MASS</strong>
+            <span>{{ fat_mass }}</span>
+        </div>
+        
+        <div class="metric-card">
+            <strong>Body Fat %</strong>
+            <span>{{ fat_percentage }}%</span>
+        </div>
+        <div class="metric-card">
+            <strong>Fat Status</strong>
+            <span>{{ fat_status }}</span>
+        </div>
+        
+        <div class="metric-card">
+            <strong>BMR</strong>
+            <span>{{ bmr }} kcal</span>
+        </div>
+        
+        <div class="metric-card">
+            <strong>Visceral Fat Index</strong>
+            <span>{{ vfi }}</span>
+        </div>
+        <div class="metric-card">
+            <strong>Moisture</strong>
+            <span>{{ moisture }}%</span>
+        </div>
+        
+        <div class="metric-card">
+            <strong>Lean Body Mass</strong>
+            <span>{{ lean_body_mass }} kg</span>
+        </div>
+        
+    </div>
+</div>
+
+<style>
+   .metrics-container {
+    padding: 2rem;
+    background: #efeef0de; /* Solid green background */
+    color: #fff;
+    width: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.title {
+    text-align: center;
+    font-size: 2.4rem;
+    margin-bottom: 2rem;
+    font-weight: bold;
+    color: #ff7043; /* Warm coral color for title */
+}
+
+.metrics-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: space-between;
+}
+
+.metric-card {
+    background: linear-gradient(145deg, #8e44ad, #6c3483); /* Soft gradient from purple to deep magenta */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    padding: 1.5rem;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    width: 23%;
+}
+
+.metric-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(255, 69, 0, 0.3); /* Amber-orange hover effect */
+}
+
+.metric-card strong {
+    display: block;
+    font-size: 1.1rem;
+    color: #ffeb3b; /* Bright yellow for strong text */
+    margin-bottom: 0.3rem;
+}
+
+.metric-card span {
+    font-size: 1rem;
+    color: #f1f1f1; /* Light off-white text for values */
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    .metric-card {
+        flex: 1 1 calc(50% - 1rem);  /* Two cards per row */
+    }
+}
+
+@media (max-width: 480px) {
+    .metric-card {
+        flex: 1 1 100%;  /* One card per row */
+    }
+}
+
+</style>
+
+{% endblock %}

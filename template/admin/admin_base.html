@@ -1,0 +1,174 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: #1e1e2f;
+            overflow: hidden; /* prevent whole-page scrolling */
+        }
+
+        .admin-container {
+            display: flex;
+            height: 100vh; /* fix the height so only content scrolls */
+        }
+
+        .sidebar {
+            width: 250px;
+            background: rgba(30, 30, 47, 0.85);
+            color: white;
+            padding: 25px 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 26px;
+            color: #ffcc00;
+        }
+
+        .sidebar a {
+            display: block;
+            color: white;
+            padding: 12px 15px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-bottom: 12px;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #ffcc00;
+            color: #1e1e2f;
+            transform: translateX(5px);
+        }
+
+        .sidebar a i {
+            margin-right: 10px;
+        }
+
+        .dropdown-menu {
+            padding-left: 15px;
+            margin-top: -8px;
+            margin-bottom: 10px;
+        }
+
+        .dropdown-menu a {
+            font-size: 14px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin: 5px 0;
+            padding: 8px 12px;
+            transition: background 0.3s ease;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #ffcc00;
+            color: #1e1e2f;
+        }
+
+        .content {
+            margin-left: 250px;
+            padding: 40px;
+            flex: 1;
+            overflow-y: auto;  /* Allow scrolling inside the content */
+            height: 100vh;  /* Ensure it takes full height */
+            color: #fff;
+            background-image: url("{% static 'images/Workouts/admin2.jpg' %}");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            backdrop-filter: blur(4px);
+         
+        }
+
+        .admin-header {
+            font-size: 28px;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 20px;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                border-radius: 0;
+            }
+
+            .content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="admin-container">
+    <div class="sidebar">
+        <h2>Admin Panel</h2>
+        <a href="{% url 'admin_dashboard' %}">
+            <i class="fas fa-tachometer-alt"></i> Dashboard
+        </a>
+        <a href="{% url 'admin_users' %}">
+            <i class="fas fa-users"></i> Manage Users
+        </a>
+
+        <!-- Workouts Dropdown -->
+        <a href="#" onclick="toggleDropdown('workoutDropdown')">
+            <i class="fas fa-dumbbell"></i> Workouts <i class="fas fa-caret-down float-end"></i>
+        </a>
+        <div id="workoutDropdown" class="dropdown-menu" style="display: none;">
+            <a href="{% url 'Admin_add_workout' %}"><i class="fas fa-plus-circle"></i> Add Workout</a>
+            <a href="{% url 'Admin_View_Workouts' %}"><i class="fas fa-eye"></i> View Workouts</a>
+            <a href="{% url 'Admin_Delete_Workout' %}"><i class="fas fa-trash-alt"></i> Delete Workout</a>
+        </div>
+
+        <!-- Nutrition Dropdown -->
+        <a href="#" onclick="toggleDropdown('nutritionDropdown')">
+            <i class="fas fa-apple-alt"></i> Nutrition <i class="fas fa-caret-down float-end"></i>
+        </a>
+        <div id="nutritionDropdown" class="dropdown-menu" style="display: none;">
+            <a href="{% url 'admin_add_nutrition' %}"><i class="fas fa-plus-circle"></i> Add Nutrition</a>
+            <a href="{% url 'Admin_View_Nutrition' %}"><i class="fas fa-eye"></i> View Nutrition</a>
+            <a href="{% url 'Admin_Delete_Nutrition_List' %}"><i class="fas fa-trash-alt"></i> Delete Nutrition</a>
+        </div>
+
+        <a href="{% url 'index' %}">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+    </div>
+
+    <div class="content">
+        {% block content %}
+        <div class="admin-header">Welcome to Admin Dashboard</div>
+        <!-- Additional admin content goes here -->
+        {% endblock %}
+    </div>
+</div>
+
+<script>
+    function toggleDropdown(id) {
+        const menu = document.getElementById(id);
+        menu.style.display = (menu.style.display === "none" || menu.style.display === "") ? "block" : "none";
+    }
+</script>
+</body>
+</html>

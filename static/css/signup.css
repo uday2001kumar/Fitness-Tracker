@@ -1,0 +1,112 @@
+/* signup.css */
+
+body {
+    background: linear-gradient(to right, #1d2b64, #f8cdda);
+    background-size: cover;
+    background-position: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    overflow-y: auto;
+}
+
+.signup-container {
+    width: 100%;
+    max-width: 600px;
+    padding: 60px 20px;
+    box-sizing: border-box;
+}
+
+.form-box {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    box-sizing: border-box;
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.form-box h2 {
+    text-align: center;
+    color: #1d2b64;
+    margin-bottom: 25px;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #333;
+}
+
+.form-control {
+    border-radius: 10px;
+    padding: 10px 14px;
+    border: 1px solid #ccc;
+    transition: all 0.3s ease;
+    font-size: 15px;
+    margin-bottom: 15px;
+}
+
+.form-control:focus {
+    border-color: #1d2b64;
+    box-shadow: 0 0 5px rgba(29, 43, 100, 0.3);
+    outline: none;
+}
+
+.btn-primary {
+    background: #1d2b64;
+    border: none;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    width: 100%;
+    margin-top: 10px;
+    transition: background 0.3s ease;
+}
+
+.btn-primary:hover {
+    background: #142042;
+}
+
+p {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+p a {
+    color: #1d2b64;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+p a:hover {
+    text-decoration: underline;
+}
+
+.alert-container {
+    margin-bottom: 20px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 576px) {
+    .form-box {
+        padding: 25px 20px;
+    }
+
+    .form-box h2 {
+        font-size: 24px;
+    }
+}

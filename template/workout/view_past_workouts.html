@@ -1,0 +1,230 @@
+{% extends 'workout/base_work.html' %}
+{% load static %}
+{% block content %}
+
+<div class="workout-bg">
+    <div class="workout-container">
+        <h2>Your Workout Records</h2>
+
+        <!-- Search Form -->
+        <form method="get" class="search-form">
+            <label for="date">Search by Date:</label>
+            <input type="date" name="date" id="date" value="{{ request.GET.date }}">
+            <button type="submit">Search</button>
+        </form>
+
+        <!-- Display Selected Date Info -->
+        {% if request.GET.date %}
+            <p class="date-info">Showing records for: <strong>{{ request.GET.date }}</strong></p>
+        {% else %}
+            <p class="date-info">Showing today's workout records</p>
+        {% endif %}
+
+        <!-- Workout Table -->
+        {% if data %}
+            <table class="workout-table">
+                <thead>
+                    <tr>
+                        <th>S.No</th>
+                        <th>Workout Type</th>
+                        <th>Workout Name</th>
+                        <th>Duration</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Calories Burned</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in data %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ i.workout_type }}</td>
+                            <td>{{ i.workout_name }}</td>
+                            <td>{{ i.workout_duration }} mins</td>
+                            <td>{{ i.workout_date|date:"Y-m-d" }}</td>
+                            <td>{{ i.workout_date|date:"h:i A" }}</td>
+                            <td>{{ i.calories_burned }} kcal</td>
+                            <td><a href="{% url 'delete_workout' pk=i.id %}">Delete</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="no-records">No workout records found.</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- =================== STYLE =================== -->
+<style>
+/* Background Image */
+.workout-bg {
+    position: relative;
+    min-height: 100vh;
+    padding: 40px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background: url("{% static 'images/Workouts/workout3.jpg' %}") no-repeat center center/cover;
+}
+
+/* Container Styling */
+.workout-container {
+    padding: 40px;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 1050px;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.5); /* semi-transparent for contrast */
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: transform 0.3s ease;
+}
+
+/* Header */
+.workout-container h2 {
+    text-align: center;
+    font-size: 38px;
+    margin-bottom: 25px;
+    color: #ffcc00;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Search Form */
+.search-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.search-form label {
+    font-weight: bolder;
+    font-size: 20px;
+    color: red;
+}
+
+.search-form input[type="date"] {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: none;
+    font-size: 15px;
+    background-color: rgba(255, 255, 255, 0.7);
+    color: #333;
+    transition: background 0.3s ease;
+}
+
+.search-form input[type="date"]:hover {
+    background-color: rgba(255, 255, 255, 1);
+}
+
+.search-form button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    background-color: #ffcc00;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.search-form button:hover {
+    background-color: #e6b800;
+    transform: scale(1.05);
+}
+
+/* Date Info */
+.date-info {
+    text-align: center;
+    color: #ffe;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+/* Table Design */
+.workout-table {
+    width: 100%;
+    border-collapse: collapse;
+    overflow: hidden;
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.8);
+    color: #000;
+}
+
+.workout-table th,
+.workout-table td {
+    padding: 14px 18px;
+    text-align: center;
+}
+
+.workout-table th {
+    background-color: #ffcc00;
+    color: #000;
+    font-weight: bold;
+}
+
+.workout-table tr:nth-child(even) {
+    background-color: #f3f3f3;
+}
+
+.workout-table tr:hover {
+    background-color: #e0f7fa;
+}
+
+/* Delete Button */
+.workout-table a {
+    background-color: #e53935;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.workout-table a:hover {
+    background-color: #c62828;
+    transform: scale(1.05);
+}
+
+/* No Records */
+.no-records {
+    text-align: center;
+    color: #fff;
+    font-size: 18px;
+    margin-top: 20px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .workout-container {
+        padding: 25px;
+    }
+
+    .workout-table th,
+    .workout-table td {
+        font-size: 13px;
+        padding: 10px;
+    }
+
+    .workout-container h2 {
+        font-size: 26px;
+    }
+
+    .search-form {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .search-form input,
+    .search-form button {
+        width: 100%;
+    }
+}
+</style>
+
+{% endblock %}

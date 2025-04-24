@@ -1,0 +1,136 @@
+/* === RESET & BASE === */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Poppins', sans-serif;
+    background: #f0f0f3;
+    color: #222;
+}
+
+/* === HEADER === */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 120px;
+    background: linear-gradient(145deg, #ff6f00, #e65100);
+    color: #ffffff;
+    text-align: center;
+    padding: 20px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.25);
+    z-index: 1000;
+}
+
+header h1 {
+    font-size: 2.4rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+header p {
+    font-size: 1rem;
+    color: #ffe0b2;
+}
+
+/* === NAVIGATION SIDEBAR === */
+nav {
+    position: fixed;
+    top: 130px;
+    left: 10px;
+    bottom: 0;
+    width: 260px;
+    background: linear-gradient(145deg, #fdfdfd, #e2e2e2);
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-shadow: inset -3px -3px 8px #ffffff, inset 3px 3px 8px #ccc;
+    border-right: 2px solid #c5c5c5;
+    overflow-y: auto;
+    z-index: 999;
+}
+
+nav a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 18px;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    color: #333;
+    background: linear-gradient(145deg, #f2f2f2, #ffffff);
+    box-shadow: 3px 3px 8px rgba(0,0,0,0.1), -2px -2px 6px rgba(255,255,255,0.6);
+    transition: all 0.2s ease;
+}
+
+nav a:hover {
+    background: linear-gradient(145deg, #ff6f00, #ff8f00);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 4px 4px 12px rgba(0,0,0,0.3);
+}
+
+/* === MAIN CONTENT AREA === */
+.right {
+    position: absolute;
+    top: 130px;
+    left: 280px;
+    right: 0;
+    bottom: 0;
+    padding: 30px;
+    background: #fafafa;
+    overflow-y: auto;
+    box-shadow: inset 5px 5px 15px #d6d6d6, inset -5px -5px 15px #ffffff;
+    border-radius: 25px 0 0 0;
+}
+
+/* === SCROLLBAR STYLING === */
+.right::-webkit-scrollbar {
+    width: 10px;
+}
+.right::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+    header {
+        height: auto;
+        padding: 20px 10px;
+    }
+
+    nav {
+        position: fixed;
+        top: 100px;
+        height: auto;
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        border-radius: 0;
+        border-right: none;
+        border-bottom: 2px solid #ccc;
+    }
+
+    .right {
+        top: 200px;
+        left: 0;
+        width: 100%;
+        border-radius: 0;
+    }
+
+    nav a {
+        flex: 1 1 45%;
+        justify-content: center;
+    }
+}
