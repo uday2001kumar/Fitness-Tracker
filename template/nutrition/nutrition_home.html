@@ -2,15 +2,6 @@
 {% load static %}
 {% block content %}
 <style>
-    .video-bg {
-        position: fixed;
-        top: 0;
-        min-height: 100vh;
-        z-index: 0;
-        object-fit: cover;
-        filter: brightness(1);
-    }
-
     .glass-container {
         padding: 1.5rem;
         border-radius: 15px;
@@ -87,12 +78,20 @@
         margin-top: 1.5rem;
         justify-content: center;
     }
-</style>
 
-<video autoplay muted loop class="video-bg">
-    <source src="{% static 'images/nutritions/nutrition3.mp4' %}" type="video/mp4">
-    Your browser does not support HTML5 video.
-</video>
+    .chart-container {
+        background-color: #f0f0f0;
+        border-radius: 10px;
+        padding: 1rem;
+        margin-top: 2rem;
+        text-align: center;
+    }
+
+    .chart-container img {
+        max-width: 100%;
+        border-radius: 10px;
+    }
+</style>
 
 <div class="glass-container">
     <h1>Nutrition Dashboard</h1>
@@ -115,8 +114,7 @@
 
         <div class="card card6">
             <h3>🎯 Goal</h3>
-        <p>{{ calories_consumed_today }}/2500 kcal</p>
-
+            <p>{{ calories_consumed_today }}/2500 kcal</p>
         </div>
         
         <div class="card card4">
@@ -134,5 +132,14 @@
             <p>{{ avg_calories }} kcal</p>
         </div>
     </div>
+
+    <!-- Monthly Report Section -->
+    <div class="glass-container">
+        <h3>🔥 Monthly Calorie Consumption Progress</h3>
+        <div class="chart-container">
+            <img src="data:image/png;base64,{{ graph }}" alt="Monthly Calorie Consumption Progress Chart">
+        </div>
+    </div>
 </div>
+
 {% endblock %}

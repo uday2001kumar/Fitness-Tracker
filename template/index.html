@@ -17,27 +17,40 @@
             background: #f0f4f8;
         }
 
-        /* Navbar */
+        /* Modern Navbar */
         .navbar {
-            background-color: #002244;
-            padding: 15px 20px;
-            border-bottom: 4px solid #00c8ff;
-        }
-
-        .navbar-brand {
-            color: #ffcc00;
-            font-size: 1.8rem;
-            font-weight: bold;
-        }
-
-        .nav-link {
-            color: #ffffff !important;
-            margin-left: 20px;
-            font-weight: 500;
+            background: linear-gradient(90deg, #004e92, #00c8ff);
+            padding: 0.8rem 2rem;
+            border-bottom: 2px solid #00c8ff;
             transition: all 0.3s ease;
         }
 
-        .nav-link:hover {
+        .navbar-brand {
+            color: #ffffff;
+            font-size: 1.9rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .navbar-toggler-icon {
+            background-color: #ffcc00;
+        }
+
+        .navbar-nav .nav-link {
+            color: #ffffff !important;
+            margin-left: 15px;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #ffcc00 !important;
+            text-decoration: underline;
+        }
+
+        .navbar-nav .nav-link.active {
             color: #ffcc00 !important;
             text-decoration: underline;
         }
@@ -45,12 +58,12 @@
         /* Hero Section */
         .hero {
             width: 100%;
-            height: 90vh;
+            height: 80vh;
             background: url("{% static 'images/img7.webp' %}") no-repeat center center/cover;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 0 20px;
         }
 
         /* Central Card Style */
@@ -110,9 +123,6 @@
                     <li class="nav-item"><a class="nav-link" href="{% url 'adminlogin' %}">AdminLogin</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">UserLogin</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'signup' %}">Signup</a></li>
-
-                    <!-- <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li> -->
-                    
                 </ul>
             </div>
         </div>

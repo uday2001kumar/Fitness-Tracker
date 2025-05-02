@@ -1,0 +1,246 @@
+{% extends 'workout/base_work.html' %}
+{% block content %}
+<div class="comparison-container">
+  <h2 class="comparison-header">Workout Comparison</h2>
+
+  <form method="POST" action="{% url 'compare' %}" class="comparison-form">
+    {% csrf_token %}
+    <div class="input-groups">
+      <div class="input-group">
+        <label for="date">Latest Date:</label>
+        <input type="date" name="date" id="date" value="{{ request.POST.date }}">
+      </div>
+
+      <div class="input-group">
+        <label for="compare_date">Older Date:</label>
+        <input type="date" name="compare_date" id="compare_date" value="{{ request.POST.compare_date }}">
+      </div>
+
+      <button type="submit" class="compare-button">Compare</button>
+    </div>
+  </form>
+
+  <div class="results-section">
+
+    {% if data_total_calories %}
+      <div class="result-card">
+        <h3>{{ request.POST.date|date:"d M, Y" }}</h3>
+        <p>🔥 Total Calories Burned: <strong>{{ data_total_calories }} kcal</strong></p>
+        <p>🕒 Total Duration: <strong>{{ data_total_duration }} Minutes</strong></p>
+      </div>
+    {% endif %}
+
+    {% if com_data_total_calories %}
+      <div class="result-card">
+        <h3>{{ request.POST.compare_date|date:"d M, Y" }}</h3>
+        <p>🔥 Total Calories Burned: <strong>{{ com_data_total_calories }} kcal</strong></p>
+        <p>🕒 Total Duration: <strong>{{ com_data_total_duration }} Min</strong></p>
+      </div>
+    {% endif %}
+
+    {% if calories_difference is not none %}
+      <div class="difference-card">
+        {% if calories_difference > 0 %}
+          <p>{{ calories_difference }} kcal more burned!</p>
+          <small>🏋️‍♂️ Great job! Keep challenging yourself. Try new exercises for better results.</small>
+        {% elif calories_difference < 0 %}
+          <p> {{ calories_difference }} kcal less burned!</p>
+          <small>💪 Don't give up! Slightly increase your workout time or intensity.</small>
+        {% else %}
+          <p>⚖️ Same calories burned!</p>
+          <small>✨ Excellent consistency! Maintain your momentum.</small>
+        {% endif %}
+      </div>
+    {% endif %}
+
+  </div>
+
+  <!-- Workout Records -->
+  {% if data %}
+    <h3 class="table-title">Workout Details for {{ request.POST.date|date:"d M, Y" }}</h3>
+    <div class="table-container">
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Workout Name</th>
+            <th>Duration (mins)</th>
+            <th>Calories Burned</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for record in data %}
+            <tr>
+              <td>{{ record.workout_name }}</td>
+              <td>{{ record.workout_duration }}</td>
+              <td>{{ record.calories_burned }}</td>
+              <td>{{ record.workout_date|date:"d M Y" }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="no-records">No records found for {{ request.POST.date }}.</p>
+  {% endif %}
+
+  {% if compare_data %}
+    <h3 class="table-title">Workout Details for {{ request.POST.compare_date|date:"d M, Y" }}</h3>
+    <div class="table-container">
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Workout Name</th>
+            <th>Duration (mins)</th>
+            <th>Calories Burned</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for record in compare_data %}
+            <tr>
+              <td>{{ record.workout_name }}</td>
+              <td>{{ record.workout_duration }}</td>
+              <td>{{ record.calories_burned }}</td>
+              <td>{{ record.workout_date|date:"d M Y" }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="no-records">No records found for {{ request.POST.compare_date }}.</p>
+  {% endif %}
+</div>
+
+<!-- Updated CSS -->
+<style>
+.comparison-container {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 30px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0px 8px 24px rgba(0,0,0,0.1);
+}
+
+.comparison-header {
+  text-align: center;
+  font-size: 2.5rem;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+.input-groups {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.input-group {
+  flex: 1;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+input[type="date"] {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.compare-button {
+  margin-top: 22px;
+  padding: 12px 25px;
+  background: #ff6600;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.compare-button:hover {
+  background: #e65c00;
+}
+
+.results-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 30px;
+  justify-content: center;
+}
+
+.result-card, .difference-card {
+  background: #f5f7fa;
+  padding: 20px;
+  border-radius: 12px;
+  flex: 1;
+  min-width: 280px;
+  text-align: center;
+}
+p{
+  color: #333;
+}
+.difference-card p {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.difference-card small {
+  display: block;
+  margin-top: 8px;
+  font-size: 1.1rem;
+  color: #555;
+}
+
+.table-container {
+  overflow-x: auto;
+  margin-top: 20px;
+}
+
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.comparison-table th, .comparison-table td {
+  padding: 14px;
+  border-bottom: 1px solid #ddd;
+}
+
+.comparison-table th {
+  background-color: #333;
+  color: white;
+}
+
+.comparison-table td {
+  color: #555;
+}
+
+.no-records {
+  text-align: center;
+  font-size: 1.3rem;
+  margin-top: 20px;
+}
+
+.table-title {
+  margin-top: 50px;
+  font-size: 2rem;
+  text-align: center;
+  color: #333;
+}
+</style>
+{% endblock %}

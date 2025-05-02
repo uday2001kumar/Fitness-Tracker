@@ -31,7 +31,7 @@
 
     nav {
       width: 17%; /* Sidebar width reduced to 20% */
-      background: #2c3e50; /* Darker sidebar color */
+      background: #1e2b38; /* Darker sidebar color */
       padding: 2rem 1rem;
       display: flex;
       flex-direction: column;
@@ -149,7 +149,8 @@
       <a href="{% url 'view_nutrition' %}">📅 View Past Meals</a>
       <a href="{% url 'weekly_progress' %}">📊 Weekly Progress</a>
       <a href="{% url 'suggesionsn' %}" class="nav-link"><span> 📝</span> Nutritionist</a>
-      <a href="{% url 'home' %}">🔓 LogOut</a>
+      <a href="{% url 'nutrition_comparison' %}" class="nav-link"><span> ⚖️</span>Compare</a>
+      <a href="{% url 'home' %}">← Back</a>
     </nav>
 
     <div class="right">

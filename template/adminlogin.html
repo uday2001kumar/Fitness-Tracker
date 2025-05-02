@@ -3,30 +3,42 @@
 
 {% block content %}
 <style>
-  body {
+  body, html {
     margin: 0;
     padding: 0;
-    background: url("{% static 'images/Workouts/workout1.jpg' %}") no-repeat center center fixed;
-    background-size: cover;
+    height: 100%;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden;
+  }
+
+  .video-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    min-width: 100%;
+    min-height: 100%;
+    z-index: -1;
+    object-fit: cover;
   }
 
   .admin-hero {
-    width: 100%;
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
     padding: 20px;
+    position: relative;
+    z-index: 1;
   }
 
   .admin-card {
     background: rgba(255, 255, 255, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.3);
     backdrop-filter: blur(12px);
     border-radius: 20px;
-    padding: 35px;
-    width: 100%;
+    padding: 40px 30px;
     max-width: 420px;
+    width: 100%;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
   }
 
@@ -38,71 +50,86 @@
     font-weight: bold;
   }
 
-  .admin-card .form-label {
+  .admin-card label {
     color: #ffffff;
     font-weight: 600;
-    margin-bottom: 5px;
+    margin-bottom: 6px;
+    display: block;
   }
 
-  .admin-card .form-control {
+  .admin-card input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
     border-radius: 10px;
     border: none;
-    padding: 12px;
+    outline: none;
+    background: rgba(255, 255, 255, 0.7);
     font-size: 15px;
-    background: rgba(255, 255, 255, 0.75);
-    color: #333;
+    color: #000;
   }
 
-  .admin-card .form-control::placeholder {
+  .admin-card input::placeholder {
     color: #666;
   }
 
-  .admin-card .btn {
+  .admin-card button {
+    width: 100%;
+    padding: 12px;
     background: linear-gradient(to right, #66a6ff, #89f7fe);
-    border: none;
+    color: #fff;
     font-weight: bold;
     font-size: 16px;
-    padding: 12px;
+    border: none;
     border-radius: 10px;
-    color: #fff;
+    cursor: pointer;
     transition: background 0.4s ease;
   }
 
-  .admin-card .btn:hover {
+  .admin-card button:hover {
     background: linear-gradient(to right, #89f7fe, #66a6ff);
   }
 
+  .admin-card p {
+    color: #f5f5f5;
+    font-size: 14px;
+    text-align: center;
+  }
+
   .text-danger {
-    font-weight: 600;
     color: #ff5252;
+    font-weight: bold;
+    text-align: center;
   }
 </style>
 
+<!-- Background Video -->
+<video autoplay muted loop class="video-bg">
+  <source src="{% static 'images/workout16.mp4' %}" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
 <div class="admin-hero">
-  <div class="container d-flex justify-content-center align-items-center" style="height: 100%;">
-    <div class="admin-card">
-      <h3>Admin Login</h3>
-      {% if messages %}
-          {% for i in messages %}
-            <p style="text-align: center;color: yellow;font-size: 20px;">{{i}}</p>
-          {% endfor %}
-        {% endif %}
-      <form method="post">
-        {% csrf_token %}
-        <div class="mb-3">
-          <label for="username" class="form-label">Username</label>
-          <input type="text" class="form-control" id="username" name="username" placeholder="Enter Username" required>
-        </div>
-        <div class="mb-3">
-          <label for="password" class="form-label">Password</label>
-          <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password" required>
-        </div>
-        <button type="submit" class="btn w-100">Login</button>
-        {% if error %}
-        <div class="text-danger text-center mt-3">{{ error }}</div>
-        {% endif %}
-      </form>
-    </div>
+  <div class="admin-card">
+    <h3>Admin Login</h3>
+    {% if messages %}
+      {% for i in messages %}
+        <p style="color: yellow; font-size: 18px; text-align: center;">{{ i }}</p>
+      {% endfor %}
+    {% endif %}
+    <form method="POST">
+      {% csrf_token %}
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" placeholder="Enter Username" required>
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="Enter Password" required>
+
+      <button type="submit">Login</button>
+      {% if error %}
+        <p class="text-danger mt-3">{{ error }}</p>
+      {% endif %}
+    </form>
   </div>
 </div>
 {% endblock %}

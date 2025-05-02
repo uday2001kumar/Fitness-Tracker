@@ -6,52 +6,51 @@
     body {
         margin: 0;
         padding: 0;
-        background-image: url("{% static 'images/n1.avif' %}");
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-        background-position: center center;
-        height: 100vh;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        overflow: hidden;
     }
 
     .simple-hero {
+        position: relative;
         height: 100vh;
         display: flex;
         justify-content: center;
         align-items: center;
         text-align: center;
         padding: 20px;
+        overflow: hidden;
     }
 
     .simple-hero .content-box {
-        background: rgba(255, 255, 255, 0.15);
+        background: rgba(255, 255, 255, 0.385); /* Slightly transparent white */
         border: 1px solid rgba(255, 255, 255, 0.25);
         border-radius: 20px;
         padding: 40px 50px;
         max-width: 550px;
         width: 100%;
-        backdrop-filter: blur(10px);
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+        position: relative; /* To ensure content is on top of video */
+        z-index: 2;
     }
 
     .simple-hero h1 {
         font-size: 2.8rem;
-        color: #ffffff;
+        color: #020202; /* Dark color for text */
         margin-bottom: 20px;
         font-weight: 700;
-        text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+        text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
     }
 
     .simple-hero p {
         font-size: 1.2rem;
-        color: #eeeeee;
+        color: #090909; /* Soft gray for the paragraph text */
         margin-bottom: 30px;
     }
 
     .simple-hero a.btn {
-        background: linear-gradient(to right, #66a6ff, #89f7fe);
+        background: linear-gradient(to right, #66a6ff, #66a6ff);
         color: #fff;
+        font-weight: bolder;
         text-decoration: none;
         padding: 12px 30px;
         font-size: 1rem;
@@ -63,10 +62,27 @@
     .simple-hero a.btn:hover {
         background: linear-gradient(to right, #5586dd, #70d9f4);
     }
+
+    /* Video Styles */
+    .video-background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 1;
+    }
 </style>
 
 <main>
     <section class="simple-hero">
+        <!-- Background Video -->
+        <video class="video-background" autoplay loop muted>
+            <source src="{% static 'images/workout13.mp4' %}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+
         <div class="content-box">
             <h1>Track Your Fitness Journey</h1>
             <p>Stay fit and healthy by tracking your workouts and nutrition.</p>

@@ -1,134 +1,144 @@
-{% extends 'workout/base_work.html' %}
-{% load static %}
-{% block content %}
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+    {% extends 'workout/base_work.html' %}
+    {% load static %}
+    {% block content %}
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
 
-    .video-bg {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        object-fit: cover;
-        z-index: 0;
-        filter: brightness(0.5);
-    }
+        /* Global Styles */
+        .glass-container {
+            position: relative;
+            z-index: 1;
+            padding: 1rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(31, 38, 135, 0.3);
+            color: #fff;
+            max-width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(8px);
+        }
 
-    .glass-container {
-        position: relative;
-        z-index: 1;
-        padding: 2rem;
-        border-radius: 20px;
-        box-shadow: 0 8px 30px rgba(31, 38, 135, 0.4);
-        color: #fff;
-        max-width: 90%;
-        margin: 2rem auto;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-    }
+        .card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
+            border-radius: 12px;
+            padding: 1rem;
+            color: #101010;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease, background 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+            width: 200px;
+            margin: 1rem;
+        }
 
-    .card {
-        flex: 1 1 180px;
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
-        border-radius: 16px;
-        padding: 1rem;
-        color:  #101010;
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.241);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        transition: transform 0.3s ease, background 0.3s ease;
-    }
+        .card:hover {
+            transform: translateY(-4px);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.06));
+        }
 
-    .card:hover {
-        transform: translateY(-4px);
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.06));
-    }
+        .card h3 {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
 
-    .card:nth-child(1) { background-color: #dd350ff6; }
-    .card:nth-child(2) { background-color: rgba(2, 93, 40, 0.956); }
-    .card:nth-child(3) { background-color: rgba(211, 163, 19, 0.955); }
-    .card:nth-child(4) { background-color: rgba(10, 117, 204, 0.959); }
-    .card:nth-child(5) { background-color: rgba(157, 18, 182, 0.985); }
+        .card p {
+            font-size: 1.3rem;
+            font-weight: 300;
+            color: #f0f0f0;
+        }
 
-    h1 {
-        font-size: 2.4rem;
-        font-weight: 700;
-        margin-bottom: 1.5rem;
-        text-align: center;
-        color: #fff;
-    }
+        .dashboard-flex {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 2rem;
+            justify-content: center;
+        }
 
-    h3 {
-        font-weight: 500;
-        margin-bottom: 0.5rem;
-        font-size: 1.1rem;
-        color: #fdfdfd;
-    }
+        /* Dashboard Card Color Variations */
+        .card:nth-child(1) { background-color: #6a1b9a; }
+        .card:nth-child(2) { background-color: #1976d2; }
+        .card:nth-child(3) { background-color: #d32f2f; }
+        .card:nth-child(4) { background-color: #388e3c; }
+        .card:nth-child(5) { background-color: #fbc02d; }
 
-    p {
-        font-size: 1.1rem;
-        font-weight: 300;
-        margin: 0;
-        color: #f0f0f0;
-    }
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-align: center;
+            color: #121212;
+        }
 
-    .dashboard-flex {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 1.2rem;
-        margin-top: 2rem;
-        justify-content: center;
-    }
+        h3 {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            color: #121212;
+        }
 
-    .dashboard-flex .card[style*="flex: 1;"] {
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        padding: 1.2rem;
-    }
-</style>
+        .chart-container {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 2rem;
+            text-align: center;
+        }
 
-<!-- Background Video -->
-<video autoplay muted loop class="video-bg">
-    <source src="{% static 'images/workouts/workout8.mp4' %}" type="video/mp4">
-    Your browser does not support HTML5 video.
-</video>
+        .chart-container img {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+    </style>
 
-<div class="glass-container">
-    <h1>Activity Dashboard</h1>
+    <div class="glass-container">
+        <h1>Activity Dashboard</h1>
 
-    <div class="dashboard-flex">
-        <div class="card">
-            <h3>🏋️‍♂️ Total Workouts</h3>
-            <p style="font-size: 1.5rem;">{{ total_workouts }}</p>
+        <div class="dashboard-flex">
+            <div class="card">
+                <h3>🏋️‍♂️ Total Workouts</h3>
+                <p>{{ total_workouts }}</p>
+            </div>
+
+            <div class="card">
+                <h3>✅ Completed Today</h3>
+                <p>{{ completed_today }}</p>
+            </div>
+
+            <div class="card">
+                <h3>🔥 Calories Burned</h3>
+                <p>{{ calories_burned_today }} kcal</p>
+            </div>
+
+            <div class="card">
+                <h3>🎯 Goal</h3>
+                <p>{{ calories_burned_today }}/240 kcal</p>
+            </div>
+
+            <div class="card">
+                <h3>🗓️ Date</h3>
+                <p>{{ today|date:"F j, Y" }}</p>
+            </div>
+            
+            <div class="card" style="background-color: #21a4a4;width: 80%;">
+                <h3>Total Time</h3>
+                <p>{{ total_time_today }}</p>
+                <h3 style="margin-top: 1rem;">Avg. Calories / Workout</h3>
+                <p>{{ avg_calories }} kcal</p>
+            </div>
         </div>
 
-        <div class="card">
-            <h3>✅ Completed Today</h3>
-            <p style="font-size: 1.5rem;">{{ completed_today }}</p>
-        </div>
-
-        <div class="card">
-            <h3>🔥 Calories Burned</h3>
-            <p style="font-size: 1.5rem;">{{ calories_burned_today }} kcal</p>
-        </div>
-
-        <div class="card">
-            <h3>🎯 Goal</h3>
-            <p style="font-size: 1.5rem;">{{ calories_burned_today }}/240 kcal</p>
-        </div>
-
-        <div class="card">
-            <h3>🗓️ Date</h3>
-            <p style="font-size: 1.5rem;">{{ today|date:"F j, Y" }}</p>
+        <div class="glass-container">
+            <h3>🔥 Monthly Calories Burned</h3>
+            <div class="chart-container">
+                <img src="data:image/png;base64,{{ chart_data }}" alt="Monthly Report Graph">
+            </div>
         </div>
     </div>
 
-    <div class="dashboard-flex">
-        <div class="card" style="flex: 1;">
-            <h3>Total Time</h3>
-            <p>{{ total_time_today }}</p>
-            <h3 style="margin-top: 1rem;">Avg. Calories / Workout</h3>
-            <p>{{ avg_calories }} kcal</p>
-        </div>
-    </div>
-</div>
-{% endblock %}
+    {% endblock %}

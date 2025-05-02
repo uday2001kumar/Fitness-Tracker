@@ -1,0 +1,279 @@
+{% extends 'nutrition/nutrition_base.html' %}
+{% block content %}
+<div class="nutrition-comparison-container">
+  <h2 class="nutrition-comparison-header">Nutrition Comparison</h2>
+
+  <form method="POST" action="{% url 'nutrition_comparison' %}" class="nutrition-comparison-form">
+    {% csrf_token %}
+    <div class="input-groups">
+      <div class="input-group">
+        <label for="date">Latest Date:</label>
+        <input type="date" name="date" id="date" value="{{ request.POST.date }}">
+      </div>
+
+      <div class="input-group">
+        <label for="compare_date">Older Date:</label>
+        <input type="date" name="compare_date" id="compare_date" value="{{ request.POST.compare_date }}">
+      </div>
+
+      <button type="submit" class="compare-button">Compare</button>
+    </div>
+  </form>
+
+  <!-- Wrap all results inside a results-section -->
+  <div class="results-section">
+    {% if data_total_calories %}
+      <div class="result-card">
+        <p>🔥 Total Calories Consumed: <strong>{{ data_total_calories }} kcal</strong></p>
+      </div>
+    {% endif %}
+
+    {% if com_data_total_calories %}
+      <div class="result-card">
+        <p>🔥 Total Calories Consumed: <strong>{{ com_data_total_calories }} kcal</strong></p>
+      </div>
+    {% endif %}
+
+    {% if calories_difference is not none %}
+      <div class="difference-card">
+        {% if calories_difference > 0 %}
+          <p>📈 You've consumed <strong>{{ calories_difference }} kcal more</strong> than the previous date.</p>
+          <small>🧐 Try balancing your intake — aim for nutritious, portion-controlled meals.</small>
+        {% elif calories_difference < 0 %}
+          <p>📉 You've consumed <strong>{{ calories_difference }} kcal less</strong> than before.</p>
+          <small>💪 Great job! Keep it up and ensure you're meeting your nutritional needs.</small>
+        {% else %}
+          <p>⚖️ Your calorie intake is the same on both days.</p>
+          <small>✨ Consistency is great! Stay on track with your health goals.</small>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div> <!-- Closing results-section -->
+
+  <!-- Nutrition Records Section -->
+  {% if data %}
+    <h3 class="table-title">Nutrition Details for {{ request.POST.date|date:"d M, Y" }}</h3>
+    <div class="table-container">
+      <table class="nutrition-comparison-table">
+        <thead>
+          <tr>
+            <th>Food Name</th>
+            <th>Calories</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for record in data %}
+            <tr>
+              <td>{{ record.food_item }}</td>
+              <td>{{ record.total_calories }}</td>
+              <td>{{ record.date_added|date:"d M Y" }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="no-records">No records found for {{ request.POST.date }}.</p>
+  {% endif %}
+
+  {% if compare_data %}
+    <h3 class="table-title">Nutrition Details for {{ request.POST.compare_date|date:"d M, Y" }}</h3>
+    <div class="table-container">
+      <table class="nutrition-comparison-table">
+        <thead>
+          <tr>
+            <th>Food Name</th>
+            <th>Calories</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for record in compare_data %}
+            <tr>
+              <td>{{ record.food_item }}</td>
+              <td>{{ record.total_calories }}</td>
+              <td>{{ record.date_added|date:"d M Y" }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="no-records">No records found for {{ request.POST.compare_date }}.</p>
+  {% endif %}
+</div>
+
+<!-- CSS (already good, no change needed except flex-wrap small addition) -->
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: #f7f9fc;
+    color: #333;
+  }
+
+  .nutrition-comparison-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  }
+
+  .nutrition-comparison-header {
+    text-align: center;
+    font-size: 2.2rem;
+    margin-bottom: 30px;
+    font-weight: 600;
+    color: #1a73e8;
+  }
+
+  .nutrition-comparison-form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+
+  .input-groups {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    min-width: 250px;
+  }
+
+  .input-group label {
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+
+  .input-group input[type="date"] {
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: 0.3s;
+  }
+
+  .input-group input[type="date"]:focus {
+    border-color: #1a73e8;
+    outline: none;
+    box-shadow: 0 0 5px rgba(26, 115, 232, 0.3);
+  }
+
+  .compare-button {
+    background: #1a73e8;
+    color: #fff;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+    margin-top: 25px;
+  }
+
+  .compare-button:hover {
+    background: #0c57c7;
+  }
+
+  .results-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 30px;
+  }
+
+  .result-card, .difference-card {
+    background: #f1f5fb;
+    padding: 20px 25px;
+    border-radius: 15px;
+    width: 300px;
+    text-align: center;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+    transition: 0.3s;
+  }
+
+  .result-card:hover, .difference-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .result-card h3, .difference-card h3 {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+    color: #1a73e8;
+  }
+
+  .result-card p, .difference-card p {
+    font-size: 1rem;
+    margin-bottom: 8px;
+  }
+
+  .difference-card small {
+    display: block;
+    margin-top: 8px;
+    color: #666;
+  }
+
+  .table-title {
+    margin-top: 50px;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #1a73e8;
+    text-align: center;
+  }
+
+  .table-container {
+    overflow-x: auto;
+    margin-top: 20px;
+  }
+
+  .nutrition-comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    background: #ffffff;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .nutrition-comparison-table th, .nutrition-comparison-table td {
+    padding: 15px 20px;
+    text-align: center;
+  }
+
+  .nutrition-comparison-table th {
+    background: #1a73e8;
+    color: #ffffff;
+    font-weight: 600;
+  }
+
+  .nutrition-comparison-table tr:nth-child(even) {
+    background: #f9fafb;
+  }
+
+  .nutrition-comparison-table tr:hover {
+    background: #eef3fc;
+  }
+
+  .no-records {
+    text-align: center;
+    margin-top: 20px;
+    font-style: italic;
+    color: #999;
+  }
+</style>
+
+
+{% endblock %}

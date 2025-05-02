@@ -1,6 +1,24 @@
 {% extends 'admin/admin_base.html' %}
+{% load static %}
 {% block content %}
+<!-- Background Video -->
+<video autoplay muted loop id="bg-video">
+    <source src="{% static 'images/workout18.mp4' %}" type="video/mp4">
+    Your browser does not support HTML5 video.
+</video>
+
 <style>
+    /* Full-screen video background */
+    #bg-video {
+        position: fixed;
+        top: 0;
+        left: 0;
+        min-width: 100vw;
+        min-height: 100vh;
+        object-fit: cover;
+        z-index: -1;
+    }
+
     .dashboard-title {
         font-size: 32px;
         font-weight: 700;
@@ -69,4 +87,5 @@
         <div class="count">{{ nutritions }}</div>
     </div>
 </div>
+
 {% endblock %}

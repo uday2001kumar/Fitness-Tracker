@@ -9,6 +9,7 @@ urlpatterns=[
     path('logout',logout,name='logout'),
     path('home',home,name='home'),
     path('adminlogin',adminlogin,name='adminlogin'),
+    path('forget_Password',forget_Password,name="forget_Password"),
 
     # Profile
     path('profileview',profile_view,name='profileview'),
@@ -22,9 +23,12 @@ urlpatterns=[
     path('view_past_workouts',view_past_workouts,name='view_past_workouts'),
     path('weight_loss',weight_loss,name='weight_loss'),
     path('weight_gain',weight_gain,name='weight_gain'),
-    path('delete_workout/<int:pk>/',Admin_Delete_Workout_List, name='delete_workout'),
+    path('delete_workout/<int:pk>/',delete_workout, name='delete_workout'),
     path('show_weekly_chart',show_weekly_chart,name='show_weekly_chart'),
     path('suggession',suggession,name='suggession'),
+    path('generate_monthly_report',generate_monthly_report,name='generate_monthly_report'),
+    path('generate_monthly_chart',generate_monthly_chart,name='generate_monthly_chart'),
+    path('compare',compare,name='compare'),
 
     # -------------------------------------------------
     # Nutrition App
@@ -37,6 +41,7 @@ urlpatterns=[
     path('delete_nutrition/<int:pk>/',delete_nutrition, name='delete_nutrition'),
     path('weekly-progress/', weekly_progress_chart, name='weekly_progress'),
     path('suggesionsn',suggesionsn,name='suggesionsn'),
+    path('nutrition_comparison',nutrition_comparison,name='nutrition_comparison'),
 
 
     # Admin

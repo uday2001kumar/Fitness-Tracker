@@ -3,6 +3,13 @@
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/signup.css' %}">
+
+<!-- Background video -->
+<video autoplay muted loop id="bg-video">
+    <source src="{% static 'images/workout17.mp4' %}" type="video/mp4">
+    Your browser does not support HTML5 video.
+</video>
+
 <div class="signup-page-wrapper">
     <form method="POST" action="{% url 'sview' %}" enctype="multipart/form-data" class="signup-form animate-slide-in">
         {% csrf_token %}
@@ -93,15 +100,22 @@
 </div>
 
 <style>
+    /* Background video style */
+    #bg-video {
+        position: fixed;
+        top: 0;
+        left: 0;
+        min-width: 100vw;
+        min-height: 100vh;
+        object-fit: cover;
+        z-index: -1;
+    }
+
     body {
-        background-image: url("{% static 'images/Workouts/workout4.jpg' %}");
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-        background-position: center;
         margin: 0;
         padding: 0;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        overflow-x: hidden;
     }
 
     .signup-page-wrapper {

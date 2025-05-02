@@ -187,9 +187,6 @@ def profile(request):
     else:
         control_status = "You're at your ideal weight!"
 
-
-
-
     context = {
         'userprofile':userprofile,
         'weight':weight,
@@ -210,6 +207,28 @@ def profile(request):
     }
 
     return render(request, 'profile/sug.html', context)
+from django.core.mail import send_mail
+from django.conf import settings
+def forget_Password(request):
+    if request.method == 'POST':
+        email = request.POST.get("email")
+        try:
+            user = UserProfile.objects.get(email=email)
+            password = user.password  # ⚠️ Assumes password is stored as plaintext (NOT RECOMMENDED)
+
+            subject = "Welcome to FitnessTracker App!"
+            message = f"Your Password is: {password}"
+            from_email = settings.EMAIL_HOST_USER
+            recipient_list = [email]
+
+            send_mail(subject, message, from_email, recipient_list, fail_silently=False)
+            messages.success(request, "Password sent to your email!")
+        except UserProfile.DoesNotExist:
+            messages.error(request, "Email not registered!")
+        except Exception as e:
+            messages.error(request, f"Error sending email: {e}")
+    
+    return render(request, 'forget.html')
 
 
 def update_profile(request):
@@ -235,7 +254,7 @@ def update_profile(request):
         user.fitness_level=fitness_level
         user.email=email
         user.save()
-        return redirect(profile)  
+        return redirect('profile')  
     user_email = request.session['email']
     if user_email:
         user_details=UserProfile.objects.get(email=user_email)
@@ -277,7 +296,9 @@ def workouthome(request):
     # Workout type today (optional)
     logs_today = Add_Workout.objects.filter(user=user, workout_date__date=today)
     workout_type_today = logs_today.first().workout_type if logs_today.exists() else "N/A"
-
+    chart_data = generate_monthly_chart(request)
+    if not chart_data:
+        return redirect('login')
     return render(request, 'workout/work_home.html', {
         'total_workouts': total_workouts,
         'completed_today': completed_today,
@@ -286,6 +307,7 @@ def workouthome(request):
         'total_time_today': f"{total_minutes // 60}h {total_minutes % 60}m",
         'avg_calories': avg_calories,
         'workout_type_today': workout_type_today,
+        'chart_data':chart_data,
     })
 
 
@@ -349,7 +371,7 @@ def add_workout(request):
             )
             m2.save()
 
-            messages.success(request, f"Workout Added Successfully! Calories burned: {calories_burned} kcal")
+            messages.success(request, f"Calories burned: {calories_burned} kcal")
             return render(request, 'workout/add_workout.html',context)
 
         else:
@@ -495,6 +517,140 @@ def show_weekly_chart(request):
 
 def suggession(request):
     return render(request,'workout/suggesions.html')
+# -----------------------------------------------------
+from datetime import timedelta
+from django.utils import timezone
+from django.db.models import Sum
+
+def generate_monthly_report(request):
+    email = request.session.get('email')
+    if not email:
+        return None
+
+    user = UserProfile.objects.filter(email=email).first()
+    if not user:
+        return None
+
+    today = timezone.now().date()
+    thirty_days_ago = today - timedelta(days=29)
+
+    workouts = (
+        Add_Workout.objects
+        .filter(user=user, workout_date__date__range=(thirty_days_ago, today))
+        .values('workout_date__date')
+        .annotate(total_calories=Sum('calories_burned'))
+        .order_by('workout_date__date')
+    )
+
+    # Prepare a dict with all 30 days initialized to 0
+    date_calories = { (today - timedelta(days=i)): 0 for i in range(29, -1, -1) }
+
+    for workout in workouts:
+        date = workout['workout_date__date']
+        total = workout['total_calories']
+        date_calories[date] = total
+
+    return date_calories
+def generate_monthly_chart(request):
+    date_calories = generate_monthly_report(request)
+
+    if not date_calories:
+        return None
+
+    dates = list(date_calories.keys())
+    calories = list(date_calories.values())
+
+    # Format x-axis labels as weekday names (e.g., Apr 12)
+    labels = [date.strftime('%d') for date in dates]
+
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+    from io import BytesIO
+    import base64
+
+    fig, ax = plt.subplots(figsize=(10, 5))
+
+    # 📈 Use plot() for a line chart
+    ax.plot(labels, calories, color='green', marker='o', linewidth=2, linestyle='-')
+
+    # 🎯 Add titles and labels
+    ax.set_title("Calories Burned Over Last 30 Days", fontsize=14)
+    ax.set_ylabel("Calories Burned", fontsize=12)
+    ax.set_xlabel("Month", fontsize=12)
+
+    # 📊 Optional: Enhance appearance
+    ax.grid(True, linestyle='--', alpha=0.5)
+    ax.set_facecolor('#f8f9fa')
+    fig.patch.set_facecolor('#f8f9fa')
+
+    # ⏳ Save image to base64
+    img_buffer = BytesIO()
+    plt.tight_layout()
+    plt.savefig(img_buffer, format='png')
+    img_buffer.seek(0)
+    img_base64 = base64.b64encode(img_buffer.getvalue()).decode('utf-8')
+    plt.close(fig)
+
+    return img_base64
+
+from datetime import datetime
+from django.shortcuts import render
+from .models import Add_Workout  # Ensure you have the correct model imported
+
+from datetime import datetime
+from django.db.models import Sum
+from django.shortcuts import render
+from .models import Add_Workout
+
+def compare(request):
+    # Initialize all variables
+    data = None
+    compare_data = None
+    data_total_calories = 0
+    com_data_total_calories = 0
+    data_total_duration = 0
+    com_data_total_duration = 0
+
+    if request.method == 'POST':
+        date = request.POST.get('date')  # Get the date selected by the user
+        compare_date = request.POST.get('compare_date')  # Get the comparison date selected by the user
+
+        # Get data for the selected date
+        if date:
+            try:
+                date_obj = datetime.strptime(date, '%Y-%m-%d').date()
+                data = Add_Workout.objects.filter(workout_date__date=date_obj)
+                data_total_calories = data.aggregate(Sum('calories_burned'))['calories_burned__sum'] or 0
+                data_total_duration = data.aggregate(Sum('workout_duration'))['workout_duration__sum'] or 0
+            except ValueError:
+                data = Add_Workout.objects.none()
+
+        # Get data for the comparison date
+        if compare_date:
+            try:
+                compare_date_obj = datetime.strptime(compare_date, '%Y-%m-%d').date()
+                compare_data = Add_Workout.objects.filter(workout_date__date=compare_date_obj)
+                com_data_total_calories = compare_data.aggregate(Sum('calories_burned'))['calories_burned__sum'] or 0
+                com_data_total_duration = compare_data.aggregate(Sum('workout_duration'))['workout_duration__sum'] or 0
+            except ValueError:
+                compare_data = Add_Workout.objects.none()
+
+    # Safely calculate even if it's a GET request
+    calories_difference = data_total_calories - com_data_total_calories
+
+    return render(request, 'workout/compare.html', {
+        'data': data,
+        'data_total_calories': data_total_calories,
+        'compare_data': compare_data,
+        'com_data_total_calories': com_data_total_calories,
+        'calories_difference': calories_difference,
+        'data_total_duration': data_total_duration,
+        'com_data_total_duration': com_data_total_duration,
+    })
+
+
+
 # ===================================================
 
 # ==========================================================
@@ -506,20 +662,66 @@ from .models import Admin_Nutrition  # Adjust the model import according to your
 from datetime import date
 from django.db.models import Sum
 from django.db.models.functions import TruncDate
+from datetime import date, timedelta
+from django.db.models import Sum
+from django.db.models.functions import TruncDate
+import matplotlib.pyplot as plt
+import io
+import base64
+from django.utils import timezone
+
 def nutrition_home(request):
     email = request.session.get("email")
+    if not email:
+        messages.error(request, "Please log in again.")
+        return redirect('login')
+
     user = UserProfile.objects.get(email=email)
-    today = date.today()
-    print(today)
-    today_nutrition = Add_Nutrition.objects.annotate(date_only=TruncDate('date_added')).filter(user=user,date_only=today)
+    today = timezone.now().date()  # Use timezone-aware date
+    today_nutrition = Add_Nutrition.objects.annotate(date_only=TruncDate('date_added')).filter(user=user, date_only=today)
+    
+    # Aggregating nutrition data for today
     total_nutritions = Admin_Nutrition.objects.count()
     consumed_today = today_nutrition.count()
-    print(consumed_today)
     calories_agg = today_nutrition.aggregate(total=Sum('total_calories'))
     calories_consumed_today = calories_agg['total'] or 0
     total_meals_today = today_nutrition.values('goal_type').distinct().count()
     nutrition_type_today = today_nutrition.values('goal_type').first()
     avg_calories = calories_consumed_today / total_meals_today if total_meals_today > 0 else 0
+    
+    # Monthly calorie progress graph logic
+    start_date = today.replace(day=1)  # First day of the current month
+    end_date = today  # Today is the end date
+
+    # Prepare data for the current month
+    dates = [start_date + timedelta(days=i) for i in range((end_date - start_date).days + 1)]
+    calories_data = []
+
+    for date in dates:
+        total = Add_Nutrition.objects.filter(user=user, date_added__date=date).aggregate(total=Sum('total_calories'))['total'] or 0
+        calories_data.append(total)
+    
+    date_labels = [date.strftime('%d') for date in dates]
+    
+    # Plotting the graph using matplotlib
+    plt.figure(figsize=(10, 5))
+    plt.plot(date_labels, calories_data, marker='o', linestyle='-', color='blue')
+    plt.title('Monthly Calorie Progress')
+    plt.xlabel('Date')
+    plt.ylabel('Total Calories')
+    plt.xticks(rotation=45)
+    plt.grid(True)
+    plt.tight_layout()
+
+    # Save the plot image to a buffer
+    buffer = io.BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    image_png = buffer.getvalue()
+    buffer.close()
+
+    graph = base64.b64encode(image_png).decode('utf-8')
+    plt.close()
 
     context = {
         'total_nutritions': total_nutritions,
@@ -529,9 +731,11 @@ def nutrition_home(request):
         'nutrition_type_today': nutrition_type_today['goal_type'] if nutrition_type_today else 'N/A',
         'avg_calories': avg_calories,
         'today': today,
+        'graph': graph,
     }
 
     return render(request, 'nutrition/nutrition_home.html', context)
+
 
 
 def nutritions(request):
@@ -690,6 +894,52 @@ def food_weight_gain(request):
 
 def suggesionsn(request):
     return render(request,'nutrition/suggesions.html')
+
+
+from django.shortcuts import render
+from django.db.models import Sum
+from .models import Add_Nutrition, UserProfile
+
+def nutrition_comparison(request):
+    data = None
+    compare_data = None
+    data_total_calories = 0
+    com_data_total_calories = 0
+    calories_difference = None
+
+    # Get the user's email from session
+    email = request.session.get("email")
+    
+    # If email exists in the session, fetch the user
+    if email:
+        user = UserProfile.objects.filter(email=email).first()
+        if user:
+            if request.method == "POST":
+                # Get the dates directly from the POST data
+                data = request.POST.get('date')
+                compare_data = request.POST.get('compare_date')
+                
+                print(data,compare_data)
+                if data and compare_data:
+                    # Get nutrition data for the selected date using consumed_date
+                    data = Add_Nutrition.objects.filter(user=user, date_added__date=data)
+                    data_total_calories = data.aggregate(Sum('total_calories'))['total_calories__sum'] or 0
+
+                    # Get nutrition data for the compare date using consumed_date
+                    compare_data = Add_Nutrition.objects.filter(user=user, date_added__date=compare_data)
+                    com_data_total_calories = compare_data.aggregate(Sum('total_calories'))['total_calories__sum'] or 0
+
+                    # Calculate the difference in calories consumed
+                    calories_difference = data_total_calories-com_data_total_calories
+
+    return render(request, 'nutrition/compare.html', {
+        'data': data,
+        'compare_data': compare_data,
+        'data_total_calories': data_total_calories,
+        'com_data_total_calories': com_data_total_calories,
+        'calories_difference': calories_difference,
+    })
+
 
 """=========================================================
    =========================================================
