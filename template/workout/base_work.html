@@ -14,22 +14,21 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #fff;
             display: flex;
             min-height: 100vh;
         }
 
         nav {
-            background: rgba(11, 11, 11, 0.932);
+            background: rgba(30, 30, 47, 0.952);
             backdrop-filter: blur(15px);
             width: 240px;
-            height: 100vh;
+            height: 120vh;
             padding: 2rem 1rem;
             display: flex;
             flex-direction: column;
             align-items: flex-start;
-            gap: 2rem;
-            position: fixed;
+            gap: 1.5rem;
+            position:fixed;
             top: 0;
             left: 0;
             box-shadow: 4px 0 15px rgba(0, 0, 0, 0.3);
@@ -116,10 +115,12 @@
         <a href="{% url 'add_workout' %}" class="nav-link"><span>➕</span> Add Workout</a>
         <a href="{% url 'view_past_workouts' %}" class="nav-link"><span>📅</span> Past Workouts</a>
         <a href="{% url 'show_weekly_chart' %}" class="nav-link"><span>📊</span> Weekly Report</a>
+        <a href="{% url 'monthly_report_workouts' %}" class="nav-link"><span>📊</span> Monthly Report</a>
         <a href="{% url 'suggession' %}" class="nav-link"><span> 📝</span> AI Doctor</a>
         <a href="{% url 'compare' %}" class="nav-link"><span> ⚖️</span>Compare</a>
         <a href="{% url 'home' %}" class="nav-link"><span>←</span> Back</a>
     </nav>
+    
 
     <!-- Right Content -->
     <div class="right">

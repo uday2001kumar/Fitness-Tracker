@@ -151,59 +151,98 @@ def profile(request):
         bmr = round(10 * weight + 6.25 * height_cm - 5 * age - 161)
         lbm = round(0.252 * weight + 0.473 * height_cm - 48.3, 2)
 
-    bmr_status = "Low" if bmr < 1500 else "Normal"
-    fat_mass = round(weight - lbm, 2)
-    fat_percentage = round((fat_mass / weight) * 100, 1)
-
-    if fat_percentage < 6:
-        fat_status = "Essential fat"
-    elif fat_percentage < 14:
-        fat_status = "Athletes"
-    elif fat_percentage < 18:
-        fat_status = "Fitness"
-    elif fat_percentage < 25:
-        fat_status = "Average"
+    # Classifying BMR status
+    if bmr < 1500:
+        bmr_status = "Low"
+    elif bmr <= 2500:
+        bmr_status = "Normal"
     else:
-        fat_status = "Obese"
+        bmr_status = "High"
+
+    fat_mass = round(weight - lbm, 2)
+
+    # Fat Percentage
+    fat_percentage = round((fat_mass / weight) * 100, 1)
+    if fat_percentage < 10:
+        fat_status = "Low"
+    elif fat_percentage <= 25:
+        fat_status = "Standard"
+    else:
+        fat_status = "High"
+
 
     # Approximate total body water (TBW) in % of body weight
     if gender.lower() == "male":
         moisture = round(0.6 * weight, 2)  # 60% of body weight
     else:
         moisture = round(0.5 * weight, 2)  # 50% of body weight
+
+    # Now classify moisture level
+    if moisture < 40:
+        moisture_status = "Low"
+    elif moisture <= 60:
+        moisture_status = "Standard"
+    else:
+        moisture_status = "High"
+
+
     # This is a very basic estimation formula, not medically precise.
     vfi = round((bmi + age / 10) - (lbm / weight) * 10, 2)
+    if vfi<=10:
+        vfi_status="Low"
+    elif vfi>10 and vfi<=15:
+        vfi_status="Normal"
+    else:
+        vfi_status="High"
+
     # Standard Weight Calculation
     if gender.lower() == "male":
-        standard_weight = round(50 + 0.91 * (height_cm - 152.4), 2)
+        standard_weight = round(50 + 0.91 * (height_cm - 152.4))
     else:
-        standard_weight = round(45.5 + 0.91 * (height_cm - 152.4), 2)
+        standard_weight = round(45.5 + 0.91 * (height_cm - 152.4))
 
     weight_control = round(weight - standard_weight, 2)
     if weight_control > 0:
-        control_status = f"lose {abs(weight_control)} kg"
+        control_status = f"Overweight"
     elif weight_control < 0:
-        control_status = f"gain {abs(weight_control)} kg"
+        control_status = f"Thin"
     else:
-        control_status = "You're at your ideal weight!"
+        control_status = "Normal"
 
+    muscle_mass = round(0.5 * lbm, 2)
+    bone_mass = round(0.15 * lbm, 2)
     context = {
         'userprofile':userprofile,
+
         'weight':weight,
+        'control_status':control_status,
         'height':height_cm,
+
+
         'bmi': bmi,
         'bmi_status': bmi_status,
+
+        'fat_percentage': fat_percentage,
+        'fat_status':fat_status,
+        
+        'moisture':moisture,
+        'moisture_status':moisture_status,
+
+
         'bmr': bmr,
         'bmr_status': bmr_status,
-        'lean_body_mass': lbm,
-        'fat_mass': fat_mass,
-        'fat_percentage': fat_percentage,
-        'fat_status': fat_status,
-        'moisture':moisture,
-        'vfi':vfi,
-        'standard_weight':standard_weight,
-        'control_status':control_status
 
+        'lean_body_mass': lbm,
+        
+        'vfi':vfi,
+        'vfi_status':vfi_status,
+
+        'fat_mass':fat_mass,
+        'standard_weight':standard_weight,
+        'weight_control':weight_control,
+        'muscle_mass':muscle_mass,
+        'bone_mass':bone_mass
+        
     }
 
     return render(request, 'profile/sug.html', context)
@@ -296,9 +335,6 @@ def workouthome(request):
     # Workout type today (optional)
     logs_today = Add_Workout.objects.filter(user=user, workout_date__date=today)
     workout_type_today = logs_today.first().workout_type if logs_today.exists() else "N/A"
-    chart_data = generate_monthly_chart(request)
-    if not chart_data:
-        return redirect('login')
     return render(request, 'workout/work_home.html', {
         'total_workouts': total_workouts,
         'completed_today': completed_today,
@@ -307,7 +343,6 @@ def workouthome(request):
         'total_time_today': f"{total_minutes // 60}h {total_minutes % 60}m",
         'avg_calories': avg_calories,
         'workout_type_today': workout_type_today,
-        'chart_data':chart_data,
     })
 
 
@@ -522,37 +557,57 @@ from datetime import timedelta
 from django.utils import timezone
 from django.db.models import Sum
 
+from django.shortcuts import render, redirect
+from django.db.models import Sum
+from datetime import timedelta
+from django.utils import timezone
+from .models import UserProfile, Add_Workout
+from calendar import monthrange
+
 def generate_monthly_report(request):
     email = request.session.get('email')
     if not email:
-        return None
+        return None, None
 
     user = UserProfile.objects.filter(email=email).first()
     if not user:
-        return None
+        return None, None
 
-    today = timezone.now().date()
-    thirty_days_ago = today - timedelta(days=29)
+    # Get the selected month from the form (e.g., "2025-05")
+    selected_month = request.GET.get('month', None)
+    if not selected_month:
+        return None, None
 
+    # Parse the selected month to get the start and end dates
+    year, month = map(int, selected_month.split('-'))
+    first_day_of_month = timezone.datetime(year, month, 1).date()
+    last_day_of_month = timezone.datetime(year, month, monthrange(year, month)[1]).date()
+
+    # Filter workouts for the selected month
     workouts = (
         Add_Workout.objects
-        .filter(user=user, workout_date__date__range=(thirty_days_ago, today))
-        .values('workout_date__date')
+        .filter(user=user, workout_date__date__range=(first_day_of_month, last_day_of_month))
+        .values('workout_date__date', 'workout_name', 'calories_burned')
         .annotate(total_calories=Sum('calories_burned'))
         .order_by('workout_date__date')
     )
 
-    # Prepare a dict with all 30 days initialized to 0
-    date_calories = { (today - timedelta(days=i)): 0 for i in range(29, -1, -1) }
+    # Prepare a dict with all days in the month initialized to 0
+    date_calories = { (first_day_of_month + timedelta(days=i)): 0 for i in range((last_day_of_month - first_day_of_month).days + 1) }
+    workout_details = []
 
     for workout in workouts:
         date = workout['workout_date__date']
         total = workout['total_calories']
         date_calories[date] = total
+        workout_details.append(workout)
 
-    return date_calories
+    return date_calories, workout_details
+
+
+
 def generate_monthly_chart(request):
-    date_calories = generate_monthly_report(request)
+    date_calories, _ = generate_monthly_report(request)
 
     if not date_calories:
         return None
@@ -560,7 +615,7 @@ def generate_monthly_chart(request):
     dates = list(date_calories.keys())
     calories = list(date_calories.values())
 
-    # Format x-axis labels as weekday names (e.g., Apr 12)
+    # Format x-axis labels as day numbers (e.g., 12)
     labels = [date.strftime('%d') for date in dates]
 
     import matplotlib
@@ -575,9 +630,9 @@ def generate_monthly_chart(request):
     ax.plot(labels, calories, color='green', marker='o', linewidth=2, linestyle='-')
 
     # 🎯 Add titles and labels
-    ax.set_title("Calories Burned Over Last 30 Days", fontsize=14)
+    ax.set_title("Calories Burned Over Selected Month", fontsize=14)
     ax.set_ylabel("Calories Burned", fontsize=12)
-    ax.set_xlabel("Month", fontsize=12)
+    ax.set_xlabel("Day", fontsize=12)
 
     # 📊 Optional: Enhance appearance
     ax.grid(True, linestyle='--', alpha=0.5)
@@ -593,6 +648,27 @@ def generate_monthly_chart(request):
     plt.close(fig)
 
     return img_base64
+def monthly_report_workouts(request):
+    selected_month = request.GET.get('month')
+    
+    if selected_month:
+        date_calories, workout_details = generate_monthly_report(request)
+        chart_data = generate_monthly_chart(request)
+    else:
+        date_calories = {}
+        workout_details = []
+        chart_data = None
+
+    return render(request, 'workout/monthly_report.html', {
+        'chart_data': chart_data,
+        'workout_details': workout_details,
+        'selected_month': selected_month or '',
+        'date_calories':date_calories,
+        'today':date.today()
+    })
+
+
+
 
 from datetime import datetime
 from django.shortcuts import render
@@ -689,40 +765,7 @@ def nutrition_home(request):
     nutrition_type_today = today_nutrition.values('goal_type').first()
     avg_calories = calories_consumed_today / total_meals_today if total_meals_today > 0 else 0
     
-    # Monthly calorie progress graph logic
-    start_date = today.replace(day=1)  # First day of the current month
-    end_date = today  # Today is the end date
-
-    # Prepare data for the current month
-    dates = [start_date + timedelta(days=i) for i in range((end_date - start_date).days + 1)]
-    calories_data = []
-
-    for date in dates:
-        total = Add_Nutrition.objects.filter(user=user, date_added__date=date).aggregate(total=Sum('total_calories'))['total'] or 0
-        calories_data.append(total)
-    
-    date_labels = [date.strftime('%d') for date in dates]
-    
-    # Plotting the graph using matplotlib
-    plt.figure(figsize=(10, 5))
-    plt.plot(date_labels, calories_data, marker='o', linestyle='-', color='blue')
-    plt.title('Monthly Calorie Progress')
-    plt.xlabel('Date')
-    plt.ylabel('Total Calories')
-    plt.xticks(rotation=45)
-    plt.grid(True)
-    plt.tight_layout()
-
-    # Save the plot image to a buffer
-    buffer = io.BytesIO()
-    plt.savefig(buffer, format='png')
-    buffer.seek(0)
-    image_png = buffer.getvalue()
-    buffer.close()
-
-    graph = base64.b64encode(image_png).decode('utf-8')
-    plt.close()
-
+   
     context = {
         'total_nutritions': total_nutritions,
         'consumed_today': consumed_today,
@@ -730,8 +773,7 @@ def nutrition_home(request):
         'total_meals_today': total_meals_today,
         'nutrition_type_today': nutrition_type_today['goal_type'] if nutrition_type_today else 'N/A',
         'avg_calories': avg_calories,
-        'today': today,
-        'graph': graph,
+        'today': today
     }
 
     return render(request, 'nutrition/nutrition_home.html', context)
@@ -872,6 +914,67 @@ def weekly_progress_chart(request):
 
     return render(request, 'nutrition/weekly_progress.html', {'graph': graph})
 
+from dateutil.relativedelta import relativedelta
+def monthly_report_nutrition(request):
+    email = request.session.get("email")
+    if not email:
+        return render(request, 'nutrition/monthly_report.html', {'graph': None})
+
+    user = UserProfile.objects.get(email=email)
+
+    # Handle selected month (from input)
+    selected_month = request.GET.get('month')
+    
+    if selected_month:
+        # Parse year and month from the input (format: YYYY-MM)
+        year, month = map(int, selected_month.split('-'))
+        start_date = datetime(year, month, 1).date()
+    else:
+        # Default to current month
+        today = timezone.now().date()
+        start_date = today.replace(day=1)
+        selected_month = start_date.strftime('%Y-%m')  # for re-filling form
+
+    end_date = (start_date + relativedelta(months=1)) - timedelta(days=1)
+
+    # Generate all dates of the month
+    dates = [start_date + timedelta(days=i) for i in range((end_date - start_date).days + 1)]
+    calories_data = []
+
+    for date in dates:
+        total = Add_Nutrition.objects.filter(user=user, date_added__date=date).aggregate(total=Sum('total_calories'))['total'] or 0
+        calories_data.append(total)
+
+    date_labels = [date.strftime('%d') for date in dates]
+
+    # Plot the graph
+    plt.figure(figsize=(10, 5))
+    plt.plot(date_labels, calories_data, marker='o', linestyle='-', color='#007bff')
+    plt.title(f'Calorie Progress for {start_date.strftime("%B %Y")}')
+    plt.xlabel('Date')
+    plt.ylabel('Total Calories')
+    plt.xticks(rotation=45)
+    plt.grid(True)
+    plt.tight_layout()
+
+    buffer = io.BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    image_png = buffer.getvalue()
+    buffer.close()
+    graph = base64.b64encode(image_png).decode('utf-8')
+    plt.close()
+    month_records = Add_Nutrition.objects.filter(
+        user=user,
+        date_added__date__range=(start_date, end_date)
+    ).order_by('date_added')
+    return render(request, 'nutrition/monthly_report.html', {
+        'graph': graph,
+        'selected_month': selected_month,
+        'month_records': month_records
+
+    })
+
 def delete_nutrition(request,pk):
     m7=Add_Nutrition.objects.get(id=pk)
     m7.delete()
@@ -1001,7 +1104,9 @@ def Admin_Delete_Workout_List(request,pk):
     return redirect(Admin_Delete_Workout)
 
 
-
+def admin_view_user(request,pk):
+    user_view=UserProfile.objects.get(id=pk)
+    return render(request,'admin/view_user.html',{'user_view':user_view})
 def admin_add_nutrition(request):
     if request.method == "POST":
         # Retrieve form data

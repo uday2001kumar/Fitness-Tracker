@@ -1,0 +1,178 @@
+{% extends 'workout/base_work.html' %}
+{% load static %}
+{% block content %}
+
+<div class="glass-container">
+    <h3>🔥 Monthly Calories Burned</h3>
+
+    <!-- Month Search Form -->
+    <form method="get" class="month-form">
+        <label for="month">📅 Choose Month:</label>
+        <input type="month" id="month" name="month" value="{{ selected_month|default:today|date:"Y-m" }}">
+        <button type="submit">View Report</button>
+    </form>
+
+    <!-- Chart -->
+    <div class="chart-container">
+        {% if chart_data %}
+            <img src="data:image/png;base64,{{ chart_data }}" alt="Monthly Report Graph">
+        {% else %}
+            <p>Graph is not available at the moment.</p>
+        {% endif %}
+    </div>
+
+    <!-- Workout Records -->
+    <div class="workout-records">
+        
+        <h4>Workout Records for {{ selected_month|date:"F Y" }}</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Workout Name</th>
+                    <th>Calories Burned</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for workout in workout_details %}
+                <tr>
+                    <td>{{ workout.workout_date__date|date:"d M Y" }}</td>
+                    <td>{{ workout.workout_name }}</td>
+                    <td>{{ workout.total_calories }} kcal</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3">No workouts recorded for this period.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<style>
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.glass-container {
+    margin: 3rem auto;
+    padding: 2rem;
+    max-width: 950px;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e3e7ea;
+}
+
+.glass-container h3 {
+    font-size: 2rem;
+    color: #00aaff;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.month-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.month-form label {
+    font-weight: 500;
+    color: #555;
+}
+
+.month-form input[type="month"] {
+    padding: 0.6rem 1rem;
+    border: 1px solid #ccdce5;
+    border-radius: 8px;
+    background: #f5faff;
+    color: #333;
+    font-size: 1rem;
+}
+
+.month-form button {
+    padding: 0.6rem 1.2rem;
+    border: none;
+    background-color: #00aaff;
+    color: white;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.month-form button:hover {
+    background-color: #008ecc;
+}
+
+.chart-container {
+    margin: 2rem 0;
+    text-align: center;
+}
+
+.chart-container img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 170, 255, 0.15);
+}
+
+.workout-records {
+    margin-top: 2rem;
+}
+
+.workout-records h4 {
+    font-size: 1.5rem;
+    color: #00aaff;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.workout-records table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 4px 8px rgba(0, 170, 255, 0.1);
+}
+
+.workout-records th, .workout-records td {
+    padding: 1rem;
+    text-align: center;
+    border: 1px solid #dfe7ed;
+}
+
+.workout-records th {
+    background-color: #e0f7ff;
+    color: #0077aa;
+    font-weight: bold;
+}
+
+.workout-records td {
+    background-color: #ffffff;
+}
+
+.workout-records tr:nth-child(even) td {
+    background-color: #f2faff;
+}
+
+.workout-records tr:hover td {
+    background-color: #dff5ff;
+    transition: background 0.2s ease;
+}
+</style>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const hasMonth = urlParams.has('month');
+
+        if (!hasMonth) {
+            document.querySelector('.month-form').submit();
+        }
+    });
+</script>
+{% endblock %}

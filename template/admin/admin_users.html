@@ -3,11 +3,16 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h2 class="text-center fw-bold mb-4" style="color: #ffcc00;">👥 Manage Users</h2>
+    <h2 class="text-center fw-bold mb-4" style="color: #ff6600;text-align: center;">👥 Manage Users</h2>
+
+    <!-- Search Bar -->
+    <div class="search-bar">
+        <input type="text" id="userSearch" class="form-control" placeholder="Search by Name..." onkeyup="filterUsers()">
+    </div>
 
     {% if messages %}
         {% for message in messages %}
-            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert" style="text-align: center;font-size: 20px;margin: 20px;">
                 {{ message }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
@@ -15,7 +20,7 @@
     {% endif %}
 
     {% if users %}
-        <div class="grid-wrapper">
+        <div class="grid-wrapper" id="userList">
             {% for user in users %}
                 <div class="user-card">
                     <div class="user-img-wrapper">
@@ -28,12 +33,13 @@
                     <div class="user-info">
                         <h5 class="username">{{ user.username }}</h5>
                         <p><strong>Name:</strong> {{ user.name }}</p>
-                        <p><strong>Email:</strong> {{ user.email }}</p>
-                        <p><strong>Height:</strong> {{ user.height }} cm</p>
-                        <p><strong>Weight:</strong> {{ user.weight }} kg</p>
-                        <p><strong>Joined:</strong> {{ user.date_joined|date:"d M Y H:i" }}</p>
-                        <a href="{% url 'admin_delete_user' pk=user.id %}" class="btn-delete"
-                           onclick="return confirm('Are you sure you want to delete {{ user.username }}?')">Delete</a>
+                        <p><strong>Name:</strong> {{ user.age }}</p>
+
+                        <div class="btn-group">
+                            <a href="{% url 'admin_view_user' pk=user.id %}" class="btn-view">View</a>
+                            <a href="{% url 'admin_delete_user' pk=user.id %}" class="btn-delete"
+                               onclick="return confirm('Are you sure you want to delete {{ user.username }}?')">Delete</a>
+                        </div>
                     </div>
                 </div>
             {% endfor %}
@@ -45,9 +51,25 @@
 
 <style>
 body {
-    background: #121212;
-    color: #f1f1f1;
+    background: #f7f7f7;
+    color: #4a4a4a;
     font-family: 'Segoe UI', sans-serif;
+}
+
+.search-bar {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.search-bar input {
+    width: 80%;
+    max-width: 500px;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ff6600;
+    box-shadow: 0 0 6px rgba(255, 102, 0, 0.2);
+    margin: 0 auto;
 }
 
 .grid-wrapper {
@@ -57,17 +79,19 @@ body {
 }
 
 .user-card {
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.1);
     border-radius: 16px;
+    color: black;
     backdrop-filter: blur(8px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
     padding: 20px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #e0e0e0;
 }
 
 .user-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.7);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
 }
 
 .user-img-wrapper {
@@ -79,9 +103,9 @@ body {
     width: 80px;
     height: 80px;
     border-radius: 50%;
-    border: 2px solid #ffcc00;
+    border: 3px solid #ff6600;
     object-fit: cover;
-    box-shadow: 0 0 10px rgba(255, 204, 0, 0.5);
+    box-shadow: 0 0 12px rgba(255, 102, 0, 0.6);
 }
 
 .user-info {
@@ -89,28 +113,91 @@ body {
 }
 
 .username {
-    color: #ffcc00;
+    color: #ff6600;
     font-weight: 600;
     margin-bottom: 10px;
+    font-size: 1.3rem;
+}
+
+.btn-group {
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 15px;
+}
+
+.btn-view, .btn-delete {
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    text-decoration: none;
+}
+
+.btn-view {
+    background-color: #28a745;
+    border: 1px solid #28a745;
+    color: white;
+}
+
+.btn-view:hover {
+    background-color: #218838;
+    color: white;
 }
 
 .btn-delete {
-    display: inline-block;
-    margin-top: 12px;
-    padding: 8px 16px;
-    border-radius: 10px;
-    background-color: red;
-    border: 1px solid #ff4d4d;
-    color:white;
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.3s ease;
+    background-color: #ff4747;
+    border: 1px solid #ff4747;
+    color: rgb(248, 245, 245);
 }
 
 .btn-delete:hover {
-    background-color: #ff4d4d;
+    background-color: #e63946;
     color: white;
-    box-shadow: 0 0 10px rgba(255, 77, 77, 0.6);
+    box-shadow: 0 0 10px rgba(230, 57, 70, 0.6);
+}
+
+h2 {
+    color: #ff6600;
+}
+
+.alert {
+    background-color: #e1f5fe;
+    color: #00796b;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.alert-dismissible .btn-close {
+    color: #00796b;
+    background-color: transparent;
+    border: none;
+}
+
+.alert-dismissible .btn-close:hover {
+    background-color: #00796b;
 }
 </style>
+
+<script>
+    // Filter users based on the search input
+    function filterUsers() {
+        let input = document.getElementById('userSearch');
+        let filter = input.value.toLowerCase();
+        let userList = document.getElementById('userList');
+        let userCards = userList.getElementsByClassName('user-card');
+
+        for (let i = 0; i < userCards.length; i++) {
+            let userInfo = userCards[i].getElementsByClassName('user-info')[0];
+            let name = userInfo.getElementsByClassName('username')[0].textContent.toLowerCase();
+            
+            if (name.indexOf(filter) > -1) {
+                userCards[i].style.display = '';
+            } else {
+                userCards[i].style.display = 'none';
+            }
+        }
+    }
+</script>
+
 {% endblock %}

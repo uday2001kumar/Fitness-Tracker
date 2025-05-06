@@ -17,7 +17,7 @@
     body {
       display: flex;
       height: 100vh;
-      background: linear-gradient(to right, #f0f4f7, #b3cde0); /* Soft pastel gradient */
+      background: #1e1e2f;
       flex-direction: column;
     }
 
@@ -31,7 +31,7 @@
 
     nav {
       width: 17%; /* Sidebar width reduced to 20% */
-      background: #1e2b38; /* Darker sidebar color */
+      background: rgba(30, 30, 47, 0.85);
       padding: 2rem 1rem;
       display: flex;
       flex-direction: column;
@@ -68,7 +68,7 @@
       text-decoration: none;
       color: #fff; /* White for nav links */
       font-size: 1.2rem;
-      padding: 0.8rem 1rem;
+      padding:  0.5rem;
       border-radius: 10px;
       transition: background 0.3s ease, color 0.3s ease;
       display: block;
@@ -148,6 +148,7 @@
       <a href="{% url 'add_nutrition' %}">➕ Add New Meal</a>
       <a href="{% url 'view_nutrition' %}">📅 View Past Meals</a>
       <a href="{% url 'weekly_progress' %}">📊 Weekly Progress</a>
+      <a href="{% url 'monthly_report_nutrition' %}">📊 Monthly Progress</a>
       <a href="{% url 'suggesionsn' %}" class="nav-link"><span> 📝</span> Nutritionist</a>
       <a href="{% url 'nutrition_comparison' %}" class="nav-link"><span> ⚖️</span>Compare</a>
       <a href="{% url 'home' %}">← Back</a>

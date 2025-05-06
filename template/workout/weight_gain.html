@@ -1,92 +1,80 @@
 {% extends 'workout/base_work.html' %}
 {% load static %}
 {% block content %}
-<div class="video-wrapper">
-    <video autoplay muted loop id="bgVideo">
-        <source src="{% static 'images/Workouts/workout5.mp4' %}" type="video/mp4">
-        Your browser does not support HTML5 video.
-    </video>
-</div>
 
-<div class="workout-bg">
-    <div class="glass-header">
+<div class="workout-section">
+    <div class="header-text">
         <h2>Weight Gain Workouts</h2>
     </div>
 
-    <div class="workout-grid-glass">
+    <div class="workout-grid-modern">
         {% for workout in workout_gain %}
-            <div class="workout-card-glass">
+            <div class="workout-card-modern">
                 <img src="{{ workout.image.url }}" alt="{{ workout.workout_name }}">
                 <h3>{{ workout.workout_name }}</h3>
                 <p>{{ workout.description }}</p>
             </div>
         {% empty %}
-            <p class="empty-msg">No weight loss workouts available.</p>
+            <p class="empty-msg">No weight gain workouts available.</p>
         {% endfor %}
     </div>
 </div>
 
-<!-- Styling -->
+<!-- Gradient Background Modern Styling -->
 <style>
-/* Background Video Styling */
-.video-wrapper {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    z-index: -1;
+body {
+    background: linear-gradient(to right, #f2f7ff, #e0f0ff);
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
-#bgVideo {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+.workout-section {
+    padding: 60px 20px;
+    max-width: 1200px;
+    margin: auto;
 }
 
-/* Workout Page Layout */
-.workout-bg {
-    position: relative;
-    padding: 40px 20px;
-    min-height: 100vh;
-    z-index: 1;
-}
-
-.glass-header h2 {
+.header-text h2 {
     text-align: center;
     font-size: 36px;
-    color: #ffcc00;
-    margin-bottom: 30px;
-    font-weight: bold;
-    text-shadow: 2px 2px #000;
+    color: #222;
+    font-weight: 700;
+    margin-bottom: 40px;
+    position: relative;
 }
 
-.workout-grid-glass {
+.header-text h2::after {
+    content: '';
+    width: 60px;
+    height: 4px;
+    background: #ffcc00;
+    display: block;
+    margin: 12px auto 0;
+    border-radius: 2px;
+}
+
+.workout-grid-modern {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 30px;
-    padding: 0 20px;
 }
 
-.workout-card-glass {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
+.workout-card-modern {
+    background: #ffffff;
+    border-radius: 16px;
     padding: 20px;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    color: #fff;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
     text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: all 0.3s ease;
 }
 
-.workout-card-glass:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+.workout-card-modern:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
 }
 
-.workout-card-glass img {
+.workout-card-modern img {
     width: 100%;
     height: 200px;
     object-fit: cover;
@@ -94,23 +82,25 @@
     margin-bottom: 15px;
 }
 
-.workout-card-glass h3 {
-    font-size: 22px;
-    color: #ffcc00;
+.workout-card-modern h3 {
+    font-size: 20px;
+    color: #333;
     margin-bottom: 10px;
 }
 
-.workout-card-glass p {
+.workout-card-modern p {
     font-size: 15px;
-    color: #e0e0e0;
+    color: #555;
+    line-height: 1.5;
 }
 
 .empty-msg {
     text-align: center;
-    color: #fff;
-    font-size: 20px;
-    font-weight: bold;
+    color: #777;
+    font-size: 18px;
     margin-top: 40px;
+    font-weight: 500;
 }
 </style>
+
 {% endblock %}

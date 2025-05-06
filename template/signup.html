@@ -4,12 +4,6 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/signup.css' %}">
 
-<!-- Background video -->
-<video autoplay muted loop id="bg-video">
-    <source src="{% static 'images/workout17.mp4' %}" type="video/mp4">
-    Your browser does not support HTML5 video.
-</video>
-
 <div class="signup-page-wrapper">
     <form method="POST" action="{% url 'sview' %}" enctype="multipart/form-data" class="signup-form animate-slide-in">
         {% csrf_token %}
@@ -100,20 +94,10 @@
 </div>
 
 <style>
-    /* Background video style */
-    #bg-video {
-        position: fixed;
-        top: 0;
-        left: 0;
-        min-width: 100vw;
-        min-height: 100vh;
-        object-fit: cover;
-        z-index: -1;
-    }
-
     body {
         margin: 0;
         padding: 0;
+        background: #e0f7fa;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         overflow-x: hidden;
     }
@@ -121,21 +105,23 @@
     .signup-page-wrapper {
         display: flex;
         justify-content: center;
-        margin-top: 100px;
+        align-items: center;
+        min-height: 100vh;
         padding: 20px;
+        margin-top: 50px; /* Added gap between navbar and form */
     }
 
     .signup-form {
-        background: rgba(255, 255, 255, 0.25);
-        backdrop-filter: blur(15px);
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 16px;
         padding: 30px;
-        border-radius: 20px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
         width: 100%;
         max-width: 700px;
-        animation: slideIn 1s ease forwards;
-        transform: translateY(-50px);
+        animation: slideIn 0.8s ease forwards;
+        transform: translateY(-30px);
         opacity: 0;
+        margin-top: 40px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
 
     @keyframes slideIn {
@@ -147,15 +133,14 @@
 
     .form-heading {
         font-weight: bold;
-        color: #1d1c1c;
-        text-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2);
+        color: #006064; /* Updated form heading color */
     }
 
     .styled-input {
-        border: 2px solid #b2ebf2;
+        border: 1px solid #00bcd4;
         border-radius: 10px;
         padding: 10px 15px;
-        background-color: rgba(255, 255, 255, 0.9);
+        background-color: rgba(255, 255, 255, 0.8);
         transition: border-color 0.3s ease;
     }
 
@@ -187,6 +172,15 @@
     .alert {
         font-weight: 600;
         color: #c62828;
+    }
+
+    a {
+        color: #007bff;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
     }
 </style>
 

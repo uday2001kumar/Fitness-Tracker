@@ -7,18 +7,8 @@
     margin: 0;
     padding: 0;
     height: 100%;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    overflow: hidden;
-  }
-
-  .video-bg {
-    position: fixed;
-    top: 0;
-    left: 0;
-    min-width: 100%;
-    min-height: 100%;
-    z-index: -1;
-    object-fit: cover;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #cce2ff, #e0f7fa);
   }
 
   .admin-hero {
@@ -27,32 +17,29 @@
     justify-content: center;
     align-items: center;
     padding: 20px;
-    position: relative;
-    z-index: 1;
   }
 
   .admin-card {
-    background: rgba(255, 255, 255, 0.15);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    backdrop-filter: blur(12px);
-    border-radius: 20px;
+    background: #ffffff;
+    border-radius: 18px;
     padding: 40px 30px;
     max-width: 420px;
     width: 100%;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    border: 1px solid #e0e0e0;
   }
 
   .admin-card h3 {
-    color: #ffffff;
+    color: #333;
     text-align: center;
     margin-bottom: 25px;
     font-size: 28px;
-    font-weight: bold;
+    font-weight: 600;
   }
 
   .admin-card label {
-    color: #ffffff;
-    font-weight: 600;
+    color: #555;
+    font-weight: 500;
     margin-bottom: 6px;
     display: block;
   }
@@ -62,59 +49,61 @@
     padding: 12px;
     margin-bottom: 20px;
     border-radius: 10px;
-    border: none;
-    outline: none;
-    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid #ccc;
+    background-color: #f7f9fc;
     font-size: 15px;
-    color: #000;
+    color: #333;
+    outline: none;
   }
 
-  .admin-card input::placeholder {
-    color: #666;
+  .admin-card input:focus {
+    border-color: #89b9ff;
+    background-color: #fff;
   }
 
   .admin-card button {
     width: 100%;
     padding: 12px;
-    background: linear-gradient(to right, #66a6ff, #89f7fe);
+    background: #0d2f6a;
     color: #fff;
     font-weight: bold;
     font-size: 16px;
     border: none;
     border-radius: 10px;
     cursor: pointer;
-    transition: background 0.4s ease;
+    transition: 0.3s ease;
   }
 
   .admin-card button:hover {
-    background: linear-gradient(to right, #89f7fe, #66a6ff);
+    background: #0d2f6ae1;
   }
 
   .admin-card p {
-    color: #f5f5f5;
+    color: #555;
     font-size: 14px;
     text-align: center;
+    margin-top: 15px;
   }
 
   .text-danger {
-    color: #ff5252;
-    font-weight: bold;
+    color: #d32f2f;
+    font-weight: 500;
     text-align: center;
   }
-</style>
 
-<!-- Background Video -->
-<video autoplay muted loop class="video-bg">
-  <source src="{% static 'images/workout16.mp4' %}" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+  @media (max-width: 500px) {
+    .admin-card {
+      padding: 30px 20px;
+    }
+  }
+</style>
 
 <div class="admin-hero">
   <div class="admin-card">
     <h3>Admin Login</h3>
     {% if messages %}
       {% for i in messages %}
-        <p style="color: yellow; font-size: 18px; text-align: center;">{{ i }}</p>
+        <p style="color: #333; font-size: 16px; text-align: center;">{{ i }}</p>
       {% endfor %}
     {% endif %}
     <form method="POST">
@@ -126,6 +115,7 @@
       <input type="password" id="password" name="password" placeholder="Enter Password" required>
 
       <button type="submit">Login</button>
+
       {% if error %}
         <p class="text-danger mt-3">{{ error }}</p>
       {% endif %}

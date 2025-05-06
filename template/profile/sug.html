@@ -5,94 +5,82 @@
     <div class="title">Body Composition Report</div>
 
     <div class="metrics-grid">
-        {% comment %} Cards here {% endcomment %}
         <div class="metric-card">
             <strong>Body Weight</strong>
             <span>{{ weight }} kg</span>
-            <div class="tooltip"></div>
+            <p id="weight">{{control_status}}<p>
         </div>
-        <div class="metric-card">
-            <strong>Body Height</strong>
-            <span>{{ height }} cm</span>
-            <div class="tooltip"></div>
-        </div>
-        <div class="metric-card">
-            <strong>Standard Weight</strong>
-            <span>{{ standard_weight }} kg</span>
-            <div class="tooltip"></div>
-        </div>
-        <div class="metric-card">
-            <strong>Weight Control</strong>
-            <span>{{ control_status }}</span>
-            <div class="tooltip"></div>
-        </div>
-        <div class="metric-card">
-            <strong>Fat Mass</strong>
-            <span>{{ fat_mass }} kg</span>
-            <div class="tooltip"></div>
-        </div>
-        <div class="metric-card">
-            <strong>BMI STATUS</strong>
-            <span>{{ bmi_status }}</span>
-            <div class="tooltip"></div>
-        </div>
+
         <div class="metric-card">
             <strong>BMI</strong>
             <span>{{ bmi }}</span>
-            <div class="tooltip"></div>
+            <p id="bmi">{{bmi_status}}</p>
         </div>
-        <div class="metric-card">
-            <strong>BMR</strong>
-            <span>{{ bmr }}</span>
-            <div class="tooltip"></div>
-        </div>
-        <div class="metric-card">
-            <strong>BMR STATUS</strong>
-            <span>{{ bmr_status }}</span>
-            <div class="tooltip"></div>
-        </div>
-        <div class="metric-card">
-            <strong>FAT MASS</strong>
-            <span>{{ fat_mass }}</span>
-            <div class="tooltip"></div>
-        </div>
+        
+        
+
         <div class="metric-card">
             <strong>Body Fat %</strong>
             <span>{{ fat_percentage }}%</span>
-            <div class="tooltip"></div>
+            <p id="fat_p">{{fat_status}}</p>
         </div>
-        <div class="metric-card">
-            <strong>Fat Status</strong>
-            <span>{{ fat_status }}</span>
-            <div class="tooltip"></div>
-        </div>
-        <div class="metric-card">
-            <strong>BMR</strong>
-            <span>{{ bmr }} kcal</span>
-            <div class="tooltip"></div>
-        </div>
-        <div class="metric-card">
-            <strong>Visceral Fat Index</strong>
-            <span>{{ vfi }}</span>
-            <div class="tooltip"></div>
-        </div>
+
         <div class="metric-card">
             <strong>Moisture</strong>
             <span>{{ moisture }}%</span>
-            <div class="tooltip"></div>
+            <p id="moisture">{{moisture_status}}</p>
         </div>
+
+        <div class="metric-card">
+            <strong>BMR</strong>
+            <span>{{ bmr }}</span>
+            <p id="bmr">{{bmr_status}}</p>
+        </div>
+
+        <div class="metric-card">
+            <strong>VFI</strong>
+            <span>{{ vfi }}</span>
+            <p id="vfi">{{vfi_status}}</p>
+        </div>
+
+        <div class="metric-card">
+            <strong>Fat Mass</strong>
+            <span>{{ fat_mass }} kg</span>
+            <p id="fat_mass">{{fat_status}}</p>
+        </div>
+        
         <div class="metric-card">
             <strong>Lean Body Mass</strong>
             <span>{{ lean_body_mass }} kg</span>
-            <div class="tooltip"></div>
         </div>
+
+        <div class="metric-card">
+            <strong>Standard Weight</strong>
+            <span>{{ standard_weight }} kg</span>
+        </div>
+
+        <div class="metric-card">
+            <strong>Weight Control</strong>
+            <span>{{ weight_control }} kg</span>
+        </div>
+
+        <div class="metric-card">
+            <strong>Musule Mass</strong>
+            <span>{{ muscle_mass }} kg</span>
+        </div>
+
+        <div class="metric-card">
+            <strong>Bone Mass</strong>
+            <span>{{ bone_mass }} kg</span>
+        </div>
+
     </div>
 </div>
 
 <style>
 .metrics-container {
     padding: 2rem;
-    background: #8d44adc6;
+    background:whitesmoke;
     color: #fff;
     width: 100%;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -103,7 +91,7 @@
     font-size: 2.4rem;
     margin-bottom: 2rem;
     font-weight: bold;
-    color: #f5f3f2;
+    color: #0c0c0c;
 }
 
 .metrics-grid {
@@ -115,8 +103,9 @@
 
 .metric-card {
     position: relative;
-    background: linear-gradient(145deg, #8e44ad, #6c3483);
     border: 1px solid rgba(255, 255, 255, 0.2);
+    background-color: rgb(249, 242, 242);
+    color: #070707;
     border-radius: 16px;
     padding: 1.5rem;
     backdrop-filter: blur(10px);
@@ -124,7 +113,6 @@
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     width: 23%;
 }
-
 .metric-card:hover {
     transform: translateY(-5px);
 }
@@ -132,13 +120,17 @@
 .metric-card strong {
     display: block;
     font-size: 1.1rem;
-    color: #ffeb3b;
+    color: #0a0a0a;
     margin-bottom: 0.3rem;
 }
 
 .metric-card span {
     font-size: 1rem;
-    color: #f1f1f1;
+    color: #060606;
+}
+p{
+    font-size: 18px;
+    font-weight: bold;
 }
 
 .tooltip {
@@ -175,112 +167,90 @@
     }
 }
 </style>
-
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const cards = document.querySelectorAll('.metric-card');
-
-    cards.forEach(card => {
-        const title = card.querySelector('strong').innerText.trim();
-        const valueText = card.querySelector('span').innerText.trim();
-        const tooltip = card.querySelector('.tooltip');
-        let value = parseFloat(valueText.replace(/[^\d.]/g, ''));
-
-        let status = '';
-        let message = '';
-
-        if (title.includes('BMI') && !title.includes('STATUS')) {
-            if (value < 18.5) {
-                status = 'low';
-                message = 'Underweight: Consider increasing calorie intake.';
-            } else if (value <= 24.9) {
-                status = 'normal';
-                message = 'BMI is in a healthy range.';
-            } else {
-                status = 'high';
-                message = 'Overweight: Consider regular exercise and a healthy diet.';
-            }
-        } else if (title.includes('Body Fat') || title.includes('FAT MASS')) {
-            if (value < 6) {
-                status = 'low';
-                message = 'Very low fat: Could be unhealthy, consult a doctor.';
-            } else if (value <= 24) {
-                status = 'normal';
-                message = 'Body fat is within a normal range.';
-            } else {
-                status = 'high';
-                message = 'High body fat: Risk of obesity-related issues.';
-            }
-        } else if (title.includes('Moisture')) {
-            if (value < 45) {
-                status = 'low';
-                message = 'Dehydrated: Drink more fluids.';
-            } else if (value <= 65) {
-                status = 'normal';
-                message = 'Hydration level is normal.';
-            } else {
-                status = 'high';
-                message = 'Excess moisture: Could be water retention.';
-            }
-        } else if (title.includes('BMR') && !title.includes('STATUS')) {
-            if (value < 1300) {
-                status = 'low';
-                message = 'Low metabolism: Consider more physical activity.';
-            } else if (value <= 1800) {
-                status = 'normal';
-                message = 'Normal metabolic rate.';
-            } else {
-                status = 'high';
-                message = 'High metabolism: Burn rate is above average.';
-            }
-        } else if (title.includes('Visceral Fat')) {
-            if (value <= 10) {
-                status = 'normal';
-                message = 'Visceral fat is at a healthy level.';
-            } else if (value <= 14) {
-                status = 'low';
-                message = 'Slightly increased visceral fat.';
-            } else {
-                status = 'high';
-                message = 'High visceral fat: May increase risk of diseases.';
-            }
-        } else if (title.includes('Weight Control')) {
-            if (valueText.toLowerCase().includes('gain')) {
-                status = 'low';
-                message = 'Weight gain needed: Consider high-calorie healthy foods.';
-            } else if (valueText.toLowerCase().includes('lose')) {
-                status = 'high';
-                message = 'Weight loss needed: Monitor diet and exercise.';
-            } else {
-                status = 'normal';
-                message = 'Weight is under control.';
-            }
-        } else {
-            status = 'normal';
-            message = 'All good!';
-        }
-
-        tooltip.innerText = message;
-
-        card.addEventListener('mouseenter', () => {
-            if (status === 'normal') {
-                card.style.boxShadow = '0 8px 30px rgba(0, 255, 0, 0.6)';
-                card.style.background = 'linear-gradient(145deg, #00c853, #00e676)';
-            } else if (status === 'low') {
-                card.style.boxShadow = '0 8px 30px rgba(255, 0, 0, 0.6)';
-                card.style.background = 'linear-gradient(145deg, #d50000, #ff1744)';
-            } else if (status === 'high') {
-                card.style.boxShadow = '0 8px 30px rgba(0, 0, 255, 0.6)';
-                card.style.background = 'linear-gradient(145deg, #2962ff, #448aff)';
-            }
-        });
-
-        card.addEventListener('mouseleave', () => {
-            card.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.1)';
-            card.style.background = 'linear-gradient(145deg, #8e44ad, #6d3483da)';
-        });
-    });
-});
+    // Weight
+    const weight=document.getElementById("weight");
+    const weight_status=weight.textContent.trim();
+    if (weight_status=="Thin"){
+        weight.style.color="blue";
+    }
+    else if(weight_status=="Overweight"){
+        weight.style.color="red"
+    }
+    else{
+        weight.style.color="green"
+    }
+    //BMI
+    const bmi=document.getElementById("bmi");
+    const bmi_status=bmi.textContent;
+    if (bmi_status=="Overweight"){
+        bmi.style.color="red";
+    }
+    else if(bmi_status=="Obese"){
+        bmi.style.color="blue";
+    }
+    else{
+        bmi.style.color="green";
+    }
+    //Body fat %
+    const fat=document.getElementById('fat_p')
+    const fat_status=fat.textContent;
+    if (fat_status=="Low"){
+        fat.style.color="blue";
+    }
+    else if(fat_status=="Standard"){
+        fat.style.color="green";
+    }
+    else{
+        fat.style.color="red";
+    }
+    //Moisture
+    const moisture=document.getElementById("moisture");
+    const moisture_status=moisture.textContent;
+    if (moisture_status=="Low"){
+         moisture.style.color="blue"
+    }
+    else if(moisture_status=="Standard"){
+         moisture.style.color="green"
+    }
+    else{
+         moisture.style.color="red"
+    }
+    //BMR
+    const bmr=document.getElementById("bmr");
+    const bmr_status=bmr.textContent;
+    if (bmr_status=="Low"){
+         bmr.style.color="blue"
+    }
+    else if(bmr_status=="Normal"){
+         bmr.style.color="green"
+    }
+    else{
+         bmr.style.color="red"
+    }
+    //VFI
+    const vfi=document.getElementById("vfi");
+    const vfi_status=vfi.textContent;
+    if (vfi_status=="Low"){
+        vfi.style.color="blue";
+    }
+    else if (vfi_status=="Normal"){
+        vfi.style.color="green";
+    }
+    else{
+        vfi.style.color="red";
+    }
+    //Fat Mass
+    const fat_mass=document.getElementById("fat_mass");
+    const fat_mass_status=fat_mass.textContent;
+    if (fat_mass_status=="Low"){
+        fat_mass.style.color="blue";
+    }
+    else if (fat_mass_status=="Standard"){
+        fat_mass.style.color="green";
+    }
+    else{
+        fat_mass.style.color="red";
+    }
 </script>
-
 {% endblock %}

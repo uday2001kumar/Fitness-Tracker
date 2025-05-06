@@ -29,6 +29,7 @@ urlpatterns=[
     path('generate_monthly_report',generate_monthly_report,name='generate_monthly_report'),
     path('generate_monthly_chart',generate_monthly_chart,name='generate_monthly_chart'),
     path('compare',compare,name='compare'),
+    path('monthly_report_workouts',monthly_report_workouts,name='monthly_report_workouts'),
 
     # -------------------------------------------------
     # Nutrition App
@@ -42,6 +43,7 @@ urlpatterns=[
     path('weekly-progress/', weekly_progress_chart, name='weekly_progress'),
     path('suggesionsn',suggesionsn,name='suggesionsn'),
     path('nutrition_comparison',nutrition_comparison,name='nutrition_comparison'),
+    path('monthly_report_nutrition',monthly_report_nutrition,name='monthly_report_nutrition'),
 
 
     # Admin
@@ -57,4 +59,5 @@ urlpatterns=[
     path('Admin_View_Nutrition',Admin_View_Nutrition,name="Admin_View_Nutrition"),
     path('Admin_Delete_Nutrition_List',Admin_Delete_Nutrition_List,name='Admin_Delete_Nutrition_List'),
     path('Admin_Delete_Nutrition<int:pk>',Admin_Delete_Nutrition,name='Admin_Delete_Nutrition'),
+    path('admin_view_user<int:pk>',admin_view_user,name='admin_view_user'),
 ]

@@ -56,176 +56,160 @@
 
 <!-- =================== STYLE =================== -->
 <style>
-/* General Styling */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-/* Container Styling */
-.workout-container {
-    width: 100%;
-    max-width: 1100px;
-    margin: 30px auto;
-    background: rgba(0, 0, 0, 0.75); /* Dark translucent background */
-    color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-    padding: 40px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-/* Header Styling */
-.workout-container h2 {
-    text-align: center;
-    color: #ffcc00;
-    font-size: 36px;
-    margin-bottom: 30px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-/* Search Form */
-.search-form {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    margin-bottom: 30px;
-}
-
-.search-form label {
-    font-size: 18px;
-    font-weight: bold;
-    color: #ffcc00;
-}
-
-.search-form input[type="date"] {
-    padding: 10px;
-    border-radius: 8px;
-    border: 2px solid #ffcc00;
-    font-size: 16px;
-    background-color: #333;
-    color: #fff;
-    transition: background-color 0.3s;
-}
-
-.search-form input[type="date"]:focus {
-    background-color: #444;
-}
-
-.search-form button {
-    padding: 10px 20px;
-    background-color: #ffcc00;
-    color: #000;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.3s;
-}
-
-.search-form button:hover {
-    background-color: #e6b800;
-    transform: scale(1.05);
-}
-
-/* Date Info */
-.date-info {
-    text-align: center;
-    color: #fff;
-    font-size: 18px;
-    margin-bottom: 20px;
-}
-
-/* Table Styling */
-.workout-table {
-    width: 100%;
-    border-collapse: collapse;
-    border-radius: 10px;
-    overflow: hidden;
-    background-color: rgba(255, 255, 255, 0.1);
-    color: #fff;
-}
-
-.workout-table th,
-.workout-table td {
-    padding: 12px 20px;
-    text-align: center;
-}
-
-.workout-table th {
-    background-color: #ffcc00;
-    color: #000;
-    font-weight: bold;
-    font-size: 18px;
-}
-
-.workout-table td {
-    background-color: rgba(255, 255, 255, 0.2);
-    color: #fff;
-    font-size: 16px;
-}
-
-.workout-table tr:nth-child(even) {
-    background-color: rgba(255, 255, 255, 0.15);
-}
-
-.workout-table tr:hover {
-    background-color: rgba(255, 255, 255, 0.3);
-}
-
-/* Delete Button */
-.workout-table a {
-    background-color: #e53935;
-    color: white;
-    padding: 6px 14px;
-    border-radius: 6px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: background-color 0.3s, transform 0.3s;
-}
-
-.workout-table a:hover {
-    background-color: #c62828;
-    transform: scale(1.05);
-}
-
-/* No Records */
-.no-records {
-    text-align: center;
-    color: #fff;
-    font-size: 18px;
-    margin-top: 20px;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
+    /* Reset and Base */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    body {
+        background-color: #f0f4f8;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #333;
+    }
+    
+    /* Container */
     .workout-container {
-        padding: 25px;
+        max-width: 1100px;
+        margin: 50px auto;
+        background: #ffffff;
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     }
-
-    .workout-table th,
-    .workout-table td {
-        font-size: 14px;
-        padding: 10px;
-    }
-
+    
+    /* Header */
     .workout-container h2 {
-        font-size: 28px;
+        text-align: center;
+        color: #0077b6;
+        font-size: 36px;
+        margin-bottom: 30px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
     }
-
+    
+    /* Search Form */
     .search-form {
-        flex-direction: column;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
         gap: 15px;
+        margin-bottom: 30px;
     }
-
-    .search-form input,
+    .search-form label {
+        font-weight: bold;
+        color: #0077b6;
+        font-size: 18px;
+    }
+    .search-form input[type="date"] {
+        padding: 10px;
+        background-color: #ffffff;
+        border: 2px solid #00b4d8;
+        border-radius: 8px;
+        color: #333;
+    }
     .search-form button {
-        width: 100%;
+        padding: 10px 20px;
+        background-color: #00b4d8;
+        border: none;
+        color: white;
+        font-weight: bold;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
     }
-}
-</style>
+    .search-form button:hover {
+        background-color: #0096c7;
+        transform: scale(1.05);
+    }
+    
+    /* Date Info */
+    .date-info {
+        text-align: center;
+        font-size: 18px;
+        margin-bottom: 20px;
+        color: #555;
+    }
+    
+    /* Table Styling */
+    .workout-table {
+        width: 100%;
+        border-collapse: collapse;
+        border-radius: 10px;
+        overflow: hidden;
+        background-color: #ffffff;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    }
+    .workout-table th, .workout-table td {
+        padding: 14px 20px;
+        text-align: center;
+    }
+    .workout-table th {
+        background-color: #0077b6;
+        color: #fff;
+        font-size: 17px;
+    }
+    .workout-table td {
+        background-color: #f8fbff;
+        font-size: 16px;
+        color: #333;
+    }
+    .workout-table tr:nth-child(even) td {
+        background-color: #eef5fb;
+    }
+    .workout-table tr:hover td {
+        background-color: #dff1ff;
+    }
+    
+    /* Delete Button */
+    .workout-table a {
+        background-color: #e63946;
+        color: white;
+        padding: 6px 14px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: background-color 0.3s, transform 0.3s;
+    }
+    .workout-table a:hover {
+        background-color: #d62828;
+        transform: scale(1.05);
+    }
+    
+    /* No Records */
+    .no-records {
+        text-align: center;
+        font-size: 18px;
+        margin-top: 25px;
+        color: #777;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+        .workout-container {
+            padding: 25px;
+        }
+    
+        .search-form {
+            flex-direction: column;
+        }
+    
+        .search-form input,
+        .search-form button {
+            width: 100%;
+        }
+    
+        .workout-container h2 {
+            font-size: 28px;
+        }
+    
+        .workout-table th,
+        .workout-table td {
+            font-size: 14px;
+            padding: 10px;
+        }
+    }
+    </style>
+    
 
 {% endblock %}

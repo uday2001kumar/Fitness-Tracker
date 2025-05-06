@@ -1,144 +1,164 @@
-    {% extends 'workout/base_work.html' %}
-    {% load static %}
-    {% block content %}
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+        {% extends 'workout/base_work.html' %}
+        {% load static %}
+        {% block content %}
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
 
-        /* Global Styles */
-        .glass-container {
-            position: relative;
-            z-index: 1;
-            padding: 1rem;
-            border-radius: 15px;
-            box-shadow: 0 4px 20px rgba(31, 38, 135, 0.3);
-            color: #fff;
-            max-width: 100%;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(8px);
-        }
+            /* Global Styles */
+            body {
+                margin: 0;
+                padding: 0;
+                font-family: 'Poppins', sans-serif;
+                background-color: #f1f1f1; /* Light background color */
+                color: #333;
+            }
 
-        .card {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
-            border-radius: 12px;
-            padding: 1rem;
-            color: #101010;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: transform 0.3s ease, background 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            text-align: center;
-            width: 200px;
-            margin: 1rem;
-        }
+            /* Dashboard Title */
+            .dashboard-title {
+                text-align: center;
+                font-size: 3rem;
+                font-weight: 700;
+                color: #333;
+                margin-top: 2rem;
+                text-transform: uppercase;
+            }
 
-        .card:hover {
-            transform: translateY(-4px);
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.06));
-        }
+            /* Flexbox container for dashboard items */
+            .dashboard-flex {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 2rem;
+                margin-top: 3rem;
+                padding: 1rem;
+            }
 
-        .card h3 {
-            font-size: 1.2rem;
-            font-weight: 500;
-            margin-bottom: 0.5rem;
-            color: #fff;
-        }
+            /* Card Design */
+            .card {
+                background: #ffffff;
+                border-radius: 10px;
+                padding: 1.5rem;
+                width: 230px;
+                text-align: center;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+                transition: transform 0.3s ease, background 0.3s ease;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+            }
 
-        .card p {
-            font-size: 1.3rem;
-            font-weight: 300;
-            color: #f0f0f0;
-        }
+            /* Hover effect on cards */
+            .card:hover {
+                transform: translateY(-10px);
+                background-color: #ff5722; /* Vibrant Orange on hover */
+            }
 
-        .dashboard-flex {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-top: 2rem;
-            justify-content: center;
-        }
+            .card h3 {
+                font-size: 1.4rem;
+                font-weight: 600;
+                color: #333;
+            }
 
-        /* Dashboard Card Color Variations */
-        .card:nth-child(1) { background-color: #6a1b9a; }
-        .card:nth-child(2) { background-color: #1976d2; }
-        .card:nth-child(3) { background-color: #d32f2f; }
-        .card:nth-child(4) { background-color: #388e3c; }
-        .card:nth-child(5) { background-color: #fbc02d; }
+            .card p {
+                font-size: 1.2rem;
+                font-weight: 400;
+                color: #0c0c0c;
+            }
 
-        h1 {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            text-align: center;
-            color: #121212;
-        }
+            /* Card Colors - Differentiation */
+            .card:nth-child(1) { background-color: #e91e62bd; } /* Pink */
+            .card:nth-child(2) { background-color: #2195f3b1; } /* Blue */
+            .card:nth-child(3) { background-color: #ff9900b0; } /* Orange */
+            .card:nth-child(4) { background-color: #4caf4fbd; } /* Green */
+            .card:nth-child(5) { background-color: #ffeb3bb7; } /* Yellow */
 
-        h3 {
-            font-weight: 500;
-            margin-bottom: 0.5rem;
-            font-size: 1rem;
-            color: #121212;
-        }
+            /* Time & Calories card styling */
+            .card.time-card {
+                background-color: #009688; /* Teal */
+                width: 85%;
+            }
 
-        .chart-container {
-            background-color: #f9f9f9;
-            border-radius: 10px;
-            padding: 1rem;
-            margin-top: 2rem;
-            text-align: center;
-        }
+            /* Additional information like Total Time and Calories */
+            .time-card h3 {
+                font-size: 1.4rem;
+                font-weight: 600;
+                color: #fff;
+                margin-bottom: 1rem;
+            }
 
-        .chart-container img {
-            max-width: 100%;
-            border-radius: 10px;
-        }
-    </style>
+            .time-card p {
+                font-size: 1.2rem;
+                color: #e0e0e0;
+            }
 
-    <div class="glass-container">
-        <h1>Activity Dashboard</h1>
+            /* Chart Container */
+            .chart-container {
+                background-color: #ffffff;
+                border-radius: 10px;
+                padding: 1.5rem;
+                margin-top: 3rem;
+                text-align: center;
+            }
 
-        <div class="dashboard-flex">
-            <div class="card">
-                <h3>🏋️‍♂️ Total Workouts</h3>
-                <p>{{ total_workouts }}</p>
-            </div>
+            .chart-container img {
+                max-width: 100%;
+                border-radius: 10px;
+            }
 
-            <div class="card">
-                <h3>✅ Completed Today</h3>
-                <p>{{ completed_today }}</p>
-            </div>
+            /* Responsive Design */
+            @media (max-width: 768px) {
+                .dashboard-flex {
+                    flex-direction: column;
+                    align-items: center;
+                }
 
-            <div class="card">
-                <h3>🔥 Calories Burned</h3>
-                <p>{{ calories_burned_today }} kcal</p>
-            </div>
+                .dashboard-title {
+                    font-size: 2.2rem;
+                }
 
-            <div class="card">
-                <h3>🎯 Goal</h3>
-                <p>{{ calories_burned_today }}/240 kcal</p>
-            </div>
-
-            <div class="card">
-                <h3>🗓️ Date</h3>
-                <p>{{ today|date:"F j, Y" }}</p>
-            </div>
-            
-            <div class="card" style="background-color: #21a4a4;width: 80%;">
-                <h3>Total Time</h3>
-                <p>{{ total_time_today }}</p>
-                <h3 style="margin-top: 1rem;">Avg. Calories / Workout</h3>
-                <p>{{ avg_calories }} kcal</p>
-            </div>
-        </div>
+                .card {
+                    width: 90%;
+                    margin-bottom: 1.5rem;
+                }
+            }
+        </style>
 
         <div class="glass-container">
-            <h3>🔥 Monthly Calories Burned</h3>
-            <div class="chart-container">
-                <img src="data:image/png;base64,{{ chart_data }}" alt="Monthly Report Graph">
+            <h1 class="dashboard-title">Activity Dashboard</h1>
+
+            <div class="dashboard-flex">
+                <div class="card">
+                    <h3>🏋️‍♂️ Total Workouts</h3>
+                    <p>{{ total_workouts }}</p>
+                </div>
+
+                <div class="card">
+                    <h3>✅ Completed Today</h3>
+                    <p>{{ completed_today }}</p>
+                </div>
+
+                <div class="card">
+                    <h3>🔥 Calories Burned</h3>
+                    <p>{{ calories_burned_today }} kcal</p>
+                </div>
+
+                <div class="card">
+                    <h3>🎯 Goal</h3>
+                    <p>{{ calories_burned_today }}/240 kcal</p>
+                </div>
+
+                <div class="card">
+                    <h3>🗓️ Date</h3>
+                    <p>{{ today|date:"F j, Y" }}</p>
+                </div>
+
+                <div class="card time-card">
+                    <h3>Total Time</h3>
+                    <p>{{ total_time_today }}</p>
+                    <h3 style="margin-top: 1rem;">Avg. Calories / Workout</h3>
+                    <p>{{ avg_calories }} kcal</p>
+                </div>
             </div>
         </div>
-    </div>
 
-    {% endblock %}
+        {% endblock %}
