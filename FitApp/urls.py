@@ -54,7 +54,6 @@ urlpatterns=[
     path('Admin_View_Workouts',Admin_View_Workouts,name='Admin_View_Workouts'),
     path('Admin_Delete_Workout',Admin_Delete_Workout,name='Admin_Delete_Workout'),
     path('Admin_Delete_Workout_List<int:pk>',Admin_Delete_Workout_List,name='Admin_Delete_Workout_List'),
-    path('delete_workout<int:pk>',delete_workout,name="Admin_Delete_Workout"),
     path('admin_add_nutrition',admin_add_nutrition,name='admin_add_nutrition'),
     path('Admin_View_Nutrition',Admin_View_Nutrition,name="Admin_View_Nutrition"),
     path('Admin_Delete_Nutrition_List',Admin_Delete_Nutrition_List,name='Admin_Delete_Nutrition_List'),

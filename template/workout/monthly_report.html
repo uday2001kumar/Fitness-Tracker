@@ -8,7 +8,7 @@
     <!-- Month Search Form -->
     <form method="get" class="month-form">
         <label for="month">📅 Choose Month:</label>
-        <input type="month" id="month" name="month" value="{{ selected_month|default:today|date:"Y-m" }}">
+        <input type="month" id="month" name="month" value="{{ selected_month_value}}">
         <button type="submit">View Report</button>
     </form>
 
@@ -24,7 +24,7 @@
     <!-- Workout Records -->
     <div class="workout-records">
         
-        <h4>Workout Records for {{ selected_month|date:"F Y" }}</h4>
+        <h4>Workout Records for {{ selected_month_value }}</h4>
         <table>
             <thead>
                 <tr>
@@ -36,7 +36,7 @@
             <tbody>
                 {% for workout in workout_details %}
                 <tr>
-                    <td>{{ workout.workout_date__date|date:"d M Y" }}</td>
+                    <td>{{ workout.workout_date|date:"d-m-Y"}}</td>
                     <td>{{ workout.workout_name }}</td>
                     <td>{{ workout.total_calories }} kcal</td>
                 </tr>

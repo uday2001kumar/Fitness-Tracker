@@ -564,11 +564,23 @@ from django.utils import timezone
 from .models import UserProfile, Add_Workout
 from calendar import monthrange
 
+from datetime import datetime, timedelta
+from django.utils import timezone
+from calendar import monthrange
+from django.db.models import Sum
+from datetime import datetime, timedelta
+from calendar import monthrange
+from django.utils import timezone
+from django.db.models import Sum, DateField
+from django.db.models.functions import Cast
+
 def generate_monthly_report(request):
+    # Get user email from session
     email = request.session.get('email')
     if not email:
         return None, None
 
+    # Get the user object from email
     user = UserProfile.objects.filter(email=email).first()
     if not user:
         return None, None
@@ -580,29 +592,35 @@ def generate_monthly_report(request):
 
     # Parse the selected month to get the start and end dates
     year, month = map(int, selected_month.split('-'))
-    first_day_of_month = timezone.datetime(year, month, 1).date()
-    last_day_of_month = timezone.datetime(year, month, monthrange(year, month)[1]).date()
+    first_day_of_month = timezone.make_aware(datetime(year, month, 1))
+    last_day_of_month = timezone.make_aware(datetime(year, month, monthrange(year, month)[1]))
 
-    # Filter workouts for the selected month
+    # Query and annotate workouts
     workouts = (
         Add_Workout.objects
-        .filter(user=user, workout_date__date__range=(first_day_of_month, last_day_of_month))
-        .values('workout_date__date', 'workout_name', 'calories_burned')
+        .filter(user=user, workout_date__date__range=(first_day_of_month.date(), last_day_of_month.date()))
+        .annotate(date=Cast('workout_date', DateField()))
+        .values('date', 'workout_date','workout_name')
         .annotate(total_calories=Sum('calories_burned'))
-        .order_by('workout_date__date')
+        .order_by('date')
     )
 
-    # Prepare a dict with all days in the month initialized to 0
-    date_calories = { (first_day_of_month + timedelta(days=i)): 0 for i in range((last_day_of_month - first_day_of_month).days + 1) }
+    # Initialize a dict for each day of the month with 0 calories
+    date_calories = {
+        (first_day_of_month.date() + timedelta(days=i)): 0
+        for i in range((last_day_of_month.date() - first_day_of_month.date()).days + 1)
+    }
     workout_details = []
 
+    # Fill in the calories from the query
     for workout in workouts:
-        date = workout['workout_date__date']
+        date = workout['date']  # ✅ use the casted 'date'
         total = workout['total_calories']
         date_calories[date] = total
         workout_details.append(workout)
 
     return date_calories, workout_details
+
 
 
 
@@ -650,25 +668,34 @@ def generate_monthly_chart(request):
     return img_base64
 def monthly_report_workouts(request):
     selected_month = request.GET.get('month')
-    
+    selected_month_display = None
+    selected_month_value = None  # NEW
+
     if selected_month:
         date_calories, workout_details = generate_monthly_report(request)
         chart_data = generate_monthly_chart(request)
+        try:
+            dt = datetime.strptime(selected_month, "%Y-%m")
+            selected_month_display = dt.strftime("%B %Y")
+            selected_month_value = selected_month  # Already in YYYY-MM
+        except ValueError:
+            selected_month_display = "Invalid"
+            selected_month_value = ""
     else:
         date_calories = {}
         workout_details = []
         chart_data = None
+        selected_month_display = "No month selected"
+        selected_month_value = date.today().strftime("%Y-%m")  # Default to current month
 
     return render(request, 'workout/monthly_report.html', {
         'chart_data': chart_data,
         'workout_details': workout_details,
-        'selected_month': selected_month or '',
-        'date_calories':date_calories,
-        'today':date.today()
+        'selected_month_display': selected_month_display,
+        'selected_month_value': selected_month_value,  # NEW
+        'date_calories': date_calories,
+        'today': date.today()
     })
-
-
-
 
 from datetime import datetime
 from django.shortcuts import render
