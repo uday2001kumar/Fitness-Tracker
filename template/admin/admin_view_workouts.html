@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h2 class="text-center fw-bold mb-4" style="color: #00e0ff;">🏋️ All Workout Routines</h2>
+    <h2 class="text-center fw-bold mb-4" style="color: #ffcc00;">🏋️ All Workout Routines</h2>
 
     {% if messages %}
         {% for message in messages %}
@@ -42,29 +42,34 @@
 </div>
 
 <style>
+/* New Background Color */
 body {
-    background-color: #0a0f1a;
-    color: #060606;
+    background: linear-gradient(135deg, #4e73df, #1e3a8a); /* Gradient background */
+    color: #f0f0f0; /* Light text color for contrast */
     font-family: 'Segoe UI', sans-serif;
 }
 
+/* Title Styling */
 h2 {
     letter-spacing: 1px;
+    color: #ffcc00; /* Bright yellow for title */
 }
 
+/* Workout Grid Layout */
 .workout-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 24px;
     margin-top: 20px;
 }
 
+/* Card Styling */
 .workout-card {
     display: flex;
     flex-direction: column;
     border-radius: 16px;
     padding: 16px;
-    background: linear-gradient(145deg, #f3f4f5, #edeef0);
+    background: linear-gradient(145deg, #f0f0f0, #d1d7e0); /* Soft background color */
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     border-left: 6px solid transparent;
@@ -75,14 +80,16 @@ h2 {
     box-shadow: 0 0 20px rgba(0, 224, 255, 0.6);
 }
 
+/* Card category color */
 .workout-card.loss {
-    border-left: 6px solid #ff1f8f;
+    border-left: 6px solid #ff1f8f; /* Red for weight loss */
 }
 
 .workout-card.gain {
-    border-left: 6px solid #00ff88;
+    border-left: 6px solid #00ff88; /* Green for weight gain */
 }
 
+/* Image Section */
 .workout-image {
     text-align: center;
     margin-bottom: 12px;
@@ -93,7 +100,7 @@ h2 {
     height: 180px;
     object-fit: cover;
     border-radius: 12px;
-    border: 2px solid #00e0ff;
+    border: 2px solid #ffcc00; /* Bright yellow border for image */
     transition: 0.3s ease;
 }
 
@@ -103,13 +110,14 @@ h2 {
     margin-top: 6px;
 }
 
+/* Workout Info Section */
 .workout-info {
-    color: #0b0b0b;
+    color: #333;
     text-align: left;
 }
 
 .workout-info h4 {
-    color: #08b9d1;
+    color: #1e3a8a; /* Dark blue text for workout names */
     font-size: 1.4rem;
     margin-bottom: 12px;
 }
@@ -119,8 +127,13 @@ h2 {
     margin-bottom: 6px;
 }
 
+/* Alert Style */
 .alert {
     font-weight: 500;
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    color: #856404;
 }
+
 </style>
 {% endblock %}

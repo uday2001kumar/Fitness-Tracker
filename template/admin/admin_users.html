@@ -76,6 +76,7 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 20px;
+    justify-items: center;  /* Ensure the cards do not stretch to full width */
 }
 
 .user-card {
@@ -87,6 +88,7 @@ body {
     padding: 20px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     border: 1px solid #e0e0e0;
+    width: 280px;  /* Fix width to maintain consistency */
 }
 
 .user-card:hover {
@@ -176,6 +178,17 @@ h2 {
 
 .alert-dismissible .btn-close:hover {
     background-color: #00796b;
+}
+
+/* Ensure no stretching on smaller screens */
+@media (max-width: 768px) {
+    .grid-wrapper {
+        grid-template-columns: 1fr; /* Single column for small screens */
+    }
+
+    .user-card {
+        width: 100%; /* Allow user card to take full width on mobile */
+    }
 }
 </style>
 
