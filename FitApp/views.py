@@ -314,7 +314,8 @@ from django.db.models import Sum
 
 def workouthome(request):
     email = request.session.get("email")
-    user = UserProfile.objects.get(email=email)
+    if email:
+        user = UserProfile.objects.get(email=email)
     today = date.today()
 
     # Total number of workouts
@@ -343,19 +344,29 @@ def workouthome(request):
         'total_time_today': f"{total_minutes // 60}h {total_minutes % 60}m",
         'avg_calories': avg_calories,
         'workout_type_today': workout_type_today,
+        'user':user
     })
 
 
 def workout(request):
-    return render(request,'workout/workout.html')
+    email = request.session.get("email")
+    if email:
+        user = UserProfile.objects.get(email=email)
+    return render(request,'workout/workout.html',{'user':user})
 
 def weight_loss(request):
+    email = request.session.get("email")
+    if email:
+        user = UserProfile.objects.get(email=email)
     workout_loss=Admin_Workout.objects.filter(category="loss")
-    return render(request,'workout/weight_loss.html',{'workout_loss':workout_loss})
+    return render(request,'workout/weight_loss.html',{'workout_loss':workout_loss,'user':user})
 
 def weight_gain(request):
+    email = request.session.get("email")
+    if email:
+        user = UserProfile.objects.get(email=email)
     workout_gain=Admin_Workout.objects.filter(category="gain")
-    return render(request,'workout/weight_gain.html',{'workout_gain':workout_gain})
+    return render(request,'workout/weight_gain.html',{'workout_gain':workout_gain,'user':user})
 
 from datetime import datetime
 from django.shortcuts import render
@@ -367,6 +378,9 @@ def calculate_calories_burned(met, weight_kg, duration_minutes):
     return round(met * weight_kg * duration_hours, 2)
 
 def add_workout(request):
+    email = request.session.get("email")
+    if email:
+        user = UserProfile.objects.get(email=email)
     weight_loss_workouts = Admin_Workout.objects.filter(category='loss')
     weight_gain_workouts = Admin_Workout.objects.filter(category='gain')
     for i in weight_loss_workouts:
@@ -374,6 +388,7 @@ def add_workout(request):
     context = {
         'weight_loss_workouts': weight_loss_workouts,
         'weight_gain_workouts': weight_gain_workouts,
+        'user':user
     }
     if request.method == "POST":
         workout_type = request.POST["workout_type"]
@@ -447,7 +462,7 @@ def view_past_workouts(request):
                 workout_date__date=today
             ).order_by('-workout_date')
 
-        return render(request, 'workout/view_past_workouts.html', {'data': workouts})
+        return render(request, 'workout/view_past_workouts.html', {'data': workouts,'user':user})
 
     except UserProfile.DoesNotExist:
         messages.error(request, "User not found.")
@@ -455,6 +470,7 @@ def view_past_workouts(request):
 
 
 def delete_workout(request,pk):
+    
     m4=Add_Workout.objects.get(id=pk)
     m4.delete()
     messages.success(request,"Workout Deleted Successfully!")
@@ -545,13 +561,19 @@ def generate_chart(request):
 
     return img_base64
 def show_weekly_chart(request):
+    email = request.session.get("email")
+    if email:
+        user = UserProfile.objects.get(email=email)
     chart_data = generate_chart(request)
     if not chart_data:
         return redirect('login')
-    return render(request, 'workout/chart1.html', {'chart_data': chart_data})
+    return render(request, 'workout/chart1.html', {'chart_data': chart_data,'user':user})
 
 def suggession(request):
-    return render(request,'workout/suggesions.html')
+    email = request.session.get("email")
+    if email:
+        user = UserProfile.objects.get(email=email)
+    return render(request,'workout/suggesions.html',{'user':user})
 # -----------------------------------------------------
 from datetime import timedelta
 from django.utils import timezone
@@ -667,6 +689,9 @@ def generate_monthly_chart(request):
 
     return img_base64
 def monthly_report_workouts(request):
+    email = request.session.get("email")
+    if email:
+        user = UserProfile.objects.get(email=email)
     selected_month = request.GET.get('month')
     selected_month_display = None
     selected_month_value = None  # NEW
@@ -694,7 +719,8 @@ def monthly_report_workouts(request):
         'selected_month_display': selected_month_display,
         'selected_month_value': selected_month_value,  # NEW
         'date_calories': date_calories,
-        'today': date.today()
+        'today': date.today(),
+        'user':user
     })
 
 from datetime import datetime
@@ -741,7 +767,9 @@ def compare(request):
 
     # Safely calculate even if it's a GET request
     calories_difference = data_total_calories - com_data_total_calories
-
+    email = request.session.get("email")
+    if email:
+        user = UserProfile.objects.get(email=email)
     return render(request, 'workout/compare.html', {
         'data': data,
         'data_total_calories': data_total_calories,
@@ -750,6 +778,7 @@ def compare(request):
         'calories_difference': calories_difference,
         'data_total_duration': data_total_duration,
         'com_data_total_duration': com_data_total_duration,
+        'user':user
     })
 
 
@@ -800,7 +829,8 @@ def nutrition_home(request):
         'total_meals_today': total_meals_today,
         'nutrition_type_today': nutrition_type_today['goal_type'] if nutrition_type_today else 'N/A',
         'avg_calories': avg_calories,
-        'today': today
+        'today': today,
+        'user':user
     }
 
     return render(request, 'nutrition/nutrition_home.html', context)
@@ -808,15 +838,30 @@ def nutrition_home(request):
 
 
 def nutritions(request):
-    return render(request,'nutrition/nutritions.html')
+    email = request.session.get("email")
+    if not email:
+        messages.error(request, "Please log in again.")
+        return redirect('login')
+    else:
+        user=UserProfile.objects.get(email=email)
+
+    return render(request,'nutrition/nutritions.html',{'user':user})
 from .models import Add_Nutrition
 def add_nutrition(request):
+    email = request.session.get("email")
+    if not email:
+        messages.error(request, "Please log in again.")
+        return redirect('login')
+    else:
+        user=UserProfile.objects.get(email=email)
+
     weight_loss_nutritions = Admin_Nutrition.objects.filter(goal_type='Weight Loss')
     weight_gain_nutritions = Admin_Nutrition.objects.filter(goal_type='Weight Gain')
 
     context = {
         'weight_loss_nutritions': weight_loss_nutritions,
         'weight_gain_nutritions': weight_gain_nutritions,
+        'user':user
     }
 
     if request.method == "POST":
@@ -893,7 +938,8 @@ def view_nutrition(request):
 
         return render(request, 'nutrition/view_nutrition.html', {
             'data': m6,
-            'search_date': search_date.strftime("%Y-%m-%d")  # send as string for form field
+            'search_date': search_date.strftime("%Y-%m-%d") ,
+             'user':user 
         })
 
     except UserProfile.DoesNotExist:
@@ -939,7 +985,7 @@ def weekly_progress_chart(request):
     graph = base64.b64encode(image_png).decode('utf-8')
     plt.close()
 
-    return render(request, 'nutrition/weekly_progress.html', {'graph': graph})
+    return render(request, 'nutrition/weekly_progress.html', {'graph': graph,'user':user})
 
 from dateutil.relativedelta import relativedelta
 def monthly_report_nutrition(request):
@@ -998,8 +1044,8 @@ def monthly_report_nutrition(request):
     return render(request, 'nutrition/monthly_report.html', {
         'graph': graph,
         'selected_month': selected_month,
-        'month_records': month_records
-
+        'month_records': month_records,
+        'user':user
     })
 
 def delete_nutrition(request,pk):
@@ -1009,21 +1055,41 @@ def delete_nutrition(request,pk):
     return redirect(view_nutrition)
 
 def food_weight_loss(request):
+    email = request.session.get("email")
+    if not email:
+        messages.error(request, "Please log in again.")
+        return redirect('login')
+    else:
+        user=UserProfile.objects.get(email=email)
     food_weight_loss=Admin_Nutrition.objects.filter(goal_type="Weight Loss")
     context = {
         'food_weight_loss': food_weight_loss,
+        'user':user
     }
     return render(request,'nutrition/food_weight_loss.html',context)
 
 def food_weight_gain(request):
+    email = request.session.get("email")
+    if not email:
+        messages.error(request, "Please log in again.")
+        return redirect('login')
+    else:
+        user=UserProfile.objects.get(email=email)
     food_weight_gain=Admin_Nutrition.objects.filter(goal_type="Weight Gain")
     context = {
         'food_weight_gain': food_weight_gain,
+        'user':user
     }
     return render(request,'nutrition/food_weight_gain.html',context)
 
 def suggesionsn(request):
-    return render(request,'nutrition/suggesions.html')
+    email = request.session.get("email")
+    if not email:
+        messages.error(request, "Please log in again.")
+        return redirect('login')
+    else:
+        user=UserProfile.objects.get(email=email)
+    return render(request,'nutrition/suggesions.html',{'user':user})
 
 
 from django.shortcuts import render
@@ -1068,6 +1134,7 @@ def nutrition_comparison(request):
         'data_total_calories': data_total_calories,
         'com_data_total_calories': com_data_total_calories,
         'calories_difference': calories_difference,
+        'user':user
     })
 
 

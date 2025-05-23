@@ -2,14 +2,6 @@
 {% load static %}
 {% block content %}
 
-<!-- 🔥 Fullscreen Video Background -->
-<div class="video-bg">
-    <video autoplay muted loop playsinline>
-        <source src="{% static 'images/Workouts/workout4.mp4' %}" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
-</div>
-
 <!-- Workout Form Section -->
 <div class="add_workout">
     <div class="form-bg">
@@ -83,55 +75,44 @@
 
 <!-- Styling -->
 <style>
-/* 🎬 Fullscreen Video Background */
-.video-bg {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    z-index: -1;
-}
+/* 💡 Light Background */
+body {
+    background-color: #FFFFF0;
+    }
 
-.video-bg video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-/* Form Container */
+/* Centered Form Layout */
 .add_workout {
     width: 100%;
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    position: fixed;
-    z-index: 1;
-    padding: 20px;
+    padding: 30px;
     box-sizing: border-box;
-    color: #fff;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-} 
-
-form{
-    background-color: white;
-    padding: 25px;
-    border-radius: 7px;
 }
+
+/* Form Card Style */
+.form-glass {
+    background-color: #ffffffcc; /* Light white with slight opacity */
+    padding: 35px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 450px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
 .form-glass h2 {
     text-align: center;
     margin-bottom: 25px;
-    color: #f7f4f3; /* Updated Color */
-    font-size: 32px;
+    color: #333;
+    font-size: 30px;
 }
 
 .form-glass label {
-    font-weight: bold;
+    font-weight: 600;
     margin-top: 15px;
     display: block;
-    color: #ffcc00; /* Updated Color */
+    color: #444;
 }
 
 .form-glass input,
@@ -140,35 +121,35 @@ form{
     padding: 12px;
     margin-top: 8px;
     margin-bottom: 18px;
-    border-radius: 10px;
-    border: 1px solid #ff6600; /* Updated Border Color */
+    border-radius: 8px;
+    border: 1px solid #bbb;
     font-size: 16px;
-    background: rgba(255, 255, 255, 0.8);
+    background: #fdfdfd;
     color: #000;
 }
 
 .form-glass button {
     width: 100%;
     padding: 14px;
-    background-color: #ff6600; /* Updated Button Color */
+    background-color: #66bb6a; /* Light green */
     color: #fff;
     font-weight: bold;
     font-size: 18px;
     border: none;
-    border-radius: 10px;
+    border-radius: 8px;
     cursor: pointer;
     transition: background 0.3s ease;
 }
 
 .form-glass button:hover {
-    background-color: #e65c00; /* Updated Hover Color */
+    background-color: #4caf50;
 }
 
 .success-msg {
-    color: #00ff99;
-    font-size: 20px;
+    color: #43a047;
+    font-size: 18px;
     text-align: center;
-    font-weight: bold;
+    font-weight: 600;
 }
 </style>
 

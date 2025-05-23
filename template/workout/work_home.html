@@ -1,164 +1,141 @@
-        {% extends 'workout/base_work.html' %}
-        {% load static %}
-        {% block content %}
-        <style>
-            @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+{% extends 'workout/base_work.html' %}
+{% load static %}
+{% block content %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
 
-            /* Global Styles */
-            body {
-                margin: 0;
-                padding: 0;
-                font-family: 'Poppins', sans-serif;
-                background-color: #add8e6; /* Light background color */
-                color: #333;
-            }
+    body {
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(to right, #e0f7fa, #f1f8e9); /* Soft teal to green */
+        color: #3e3e3e; /* Gentle dark gray */
+    }
 
-            /* Dashboard Title */
-            .dashboard-title {
-                text-align: center;
-                font-size: 3rem;
-                font-weight: 700;
-                color: #333;
-                margin-top: 2rem;
-                text-transform: uppercase;
-            }
+    .glass-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
 
-            /* Flexbox container for dashboard items */
-            .dashboard-flex {
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 2rem;
-                margin-top: 3rem;
-                padding: 1rem;
-            }
+    .dashboard-title {
+        text-align: center;
+        font-size: 2.8rem;
+        font-weight: 700;
+        color: #4e4e4e;
+        margin-top: 1rem;
+        text-transform: uppercase;
+    }
 
-            /* Card Design */
-            .card {
-                background: #ffffff;
-                border-radius: 10px;
-                padding: 1.5rem;
-                width: 230px;
-                text-align: center;
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-                transition: transform 0.3s ease, background 0.3s ease;
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-            }
+    .dashboard-flex {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 2rem;
+        margin-top: 3rem;
+    }
 
-            /* Hover effect on cards */
-            .card:hover {
-                transform: translateY(-10px);
-                background-color: #ff5722; /* Vibrant Orange on hover */
-            }
+    .card {
+        border-radius: 12px;
+        padding: 1.5rem;
+        width: 240px;
+        text-align: center;
+        background: #fce4ec; /* Light pink */
+        color: #4e4e4e;
+        box-shadow: 0 4px 15px rgba(180, 180, 180, 0.2);
+        transition: transform 0.3s ease;
+    }
 
-            .card h3 {
-                font-size: 1.4rem;
-                font-weight: 600;
-                color: #333;
-            }
+    .card:hover {
+        transform: translateY(-5px);
+    }
 
-            .card p {
-                font-size: 1.2rem;
-                font-weight: 400;
-                color: #0c0c0c;
-            }
+    .card h3 {
+        font-size: 1.4rem;
+        margin-bottom: 0.5rem;
+        color: #5d4037; /* Soft brown */
+    }
 
-            /* Card Colors - Differentiation */
-            .card:nth-child(1) { background-color: #e91e62bd; } /* Pink */
-            .card:nth-child(2) { background-color: #2195f3b1; } /* Blue */
-            .card:nth-child(3) { background-color: #ff9900b0; } /* Orange */
-            .card:nth-child(4) { background-color: #4caf4fbd; } /* Green */
-            .card:nth-child(5) { background-color: #ffeb3bb7; } /* Yellow */
+    .card p {
+        font-size: 1.1rem;
+        color: #616161;
+    }
 
-            /* Time & Calories card styling */
-            .card.time-card {
-                background-color: #009688; /* Teal */
-                width: 85%;
-            }
+    /* Soft pastel colors for cards */
+    .card:nth-child(1) { background: #ffe0b2; } /* Soft orange */
+    .card:nth-child(2) { background: #dcedc8; } /* Light green */
+    .card:nth-child(3) { background: #b2dfdb; } /* Soft teal */
+    .card:nth-child(4) { background: #d1c4e9; } /* Soft purple */
+    .card:nth-child(5) { background: #ffecb3; } /* Light yellow */
 
-            /* Additional information like Total Time and Calories */
-            .time-card h3 {
-                font-size: 1.4rem;
-                font-weight: 600;
-                color: #fff;
-                margin-bottom: 1rem;
-            }
+    .card.time-card {
+        width: 90%;
+        background: #c8e6c9; /* Soft green */
+    }
 
-            .time-card p {
-                font-size: 1.2rem;
-                color: #e0e0e0;
-            }
+    .time-card h3 {
+        color: #33691e;
+        margin-bottom: 0.5rem;
+    }
 
-            /* Chart Container */
-            .chart-container {
-                background-color: #ffffff;
-                border-radius: 10px;
-                padding: 1.5rem;
-                margin-top: 3rem;
-                text-align: center;
-            }
+    .time-card p {
+        color: #558b2f;
+    }
 
-            .chart-container img {
-                max-width: 100%;
-                border-radius: 10px;
-            }
+    @media (max-width: 768px) {
+        .dashboard-flex {
+            flex-direction: column;
+            align-items: center;
+        }
 
-            /* Responsive Design */
-            @media (max-width: 768px) {
-                .dashboard-flex {
-                    flex-direction: column;
-                    align-items: center;
-                }
+        .dashboard-title {
+            font-size: 2rem;
+        }
 
-                .dashboard-title {
-                    font-size: 2.2rem;
-                }
+        .card {
+            width: 90%;
+        }
 
-                .card {
-                    width: 90%;
-                    margin-bottom: 1.5rem;
-                }
-            }
-        </style>
+        .card.time-card {
+            width: 95%;
+        }
+    }
+</style>
 
-        <div class="glass-container">
-            <h1 class="dashboard-title">Activity Dashboard</h1>
+<div class="glass-container">
+    <h1 class="dashboard-title">Activity Dashboard</h1>
 
-            <div class="dashboard-flex">
-                <div class="card">
-                    <h3>🏋️‍♂️ Total Workouts</h3>
-                    <p>{{ total_workouts }}</p>
-                </div>
-
-                <div class="card">
-                    <h3>✅ Completed Today</h3>
-                    <p>{{ completed_today }}</p>
-                </div>
-
-                <div class="card">
-                    <h3>🔥 Calories Burned</h3>
-                    <p>{{ calories_burned_today }} kcal</p>
-                </div>
-
-                <div class="card">
-                    <h3>🎯 Goal</h3>
-                    <p>{{ calories_burned_today }}/240 kcal</p>
-                </div>
-
-                <div class="card">
-                    <h3>🗓️ Date</h3>
-                    <p>{{ today|date:"F j, Y" }}</p>
-                </div>
-
-                <div class="card time-card">
-                    <h3>Total Time</h3>
-                    <p>{{ total_time_today }}</p>
-                    <h3 style="margin-top: 1rem;">Avg. Calories / Workout</h3>
-                    <p>{{ avg_calories }} kcal</p>
-                </div>
-            </div>
+    <div class="dashboard-flex">
+        <div class="card">
+            <h3>🏋️‍♂️ Total Workouts</h3>
+            <p>{{ total_workouts }}</p>
         </div>
 
-        {% endblock %}
+        <div class="card">
+            <h3>✅ Completed Today</h3>
+            <p>{{ completed_today }}</p>
+        </div>
+
+        <div class="card">
+            <h3>🔥 Calories Burned</h3>
+            <p>{{ calories_burned_today }} kcal</p>
+        </div>
+
+        <div class="card">
+            <h3>🎯 Goal</h3>
+            <p>{{ calories_burned_today }}/700 kcal</p>
+        </div>
+
+        <div class="card">
+            <h3>🗓️ Date</h3>
+            <p>{{ today|date:"F j, Y" }}</p>
+        </div>
+
+        <div class="card time-card">
+            <h3>Total Time</h3>
+            <p>{{ total_time_today }}</p>
+            <h3 style="margin-top: 1rem;">Avg. Calories / Workout</h3>
+            <p>{{ avg_calories }} kcal</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
