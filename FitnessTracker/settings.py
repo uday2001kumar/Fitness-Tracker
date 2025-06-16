@@ -82,12 +82,23 @@ WSGI_APPLICATION = 'FitnessTracker.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+<<<<<<< HEAD
 import os
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+=======
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME':'udayfit',
+        'USER':'root',
+        'PASSWORD':'uday',
+        'HOST':'localhost',
+        'PORT':'3306',
+>>>>>>> e64e30a8340ccf1c167fedc31256ebd718a6d8c3
     }
 }
 
