@@ -1,0 +1,256 @@
+{% extends 'profile.html' %}
+{% block content %}
+
+<div class="metrics-container">
+    <div class="title">Body Composition Report</div>
+
+    <div class="metrics-grid">
+        <div class="metric-card">
+            <strong>Body Weight</strong>
+            <span>{{ weight }} kg</span>
+            <p id="weight">{{control_status}}<p>
+        </div>
+
+        <div class="metric-card">
+            <strong>BMI</strong>
+            <span>{{ bmi }}</span>
+            <p id="bmi">{{bmi_status}}</p>
+        </div>
+        
+        
+
+        <div class="metric-card">
+            <strong>Body Fat %</strong>
+            <span>{{ fat_percentage }}%</span>
+            <p id="fat_p">{{fat_status}}</p>
+        </div>
+
+        <div class="metric-card">
+            <strong>Moisture</strong>
+            <span>{{ moisture }}%</span>
+            <p id="moisture">{{moisture_status}}</p>
+        </div>
+
+        <div class="metric-card">
+            <strong>BMR</strong>
+            <span>{{ bmr }}</span>
+            <p id="bmr">{{bmr_status}}</p>
+        </div>
+
+        <div class="metric-card">
+            <strong>VFI</strong>
+            <span>{{ vfi }}</span>
+            <p id="vfi">{{vfi_status}}</p>
+        </div>
+
+        <div class="metric-card">
+            <strong>Fat Mass</strong>
+            <span>{{ fat_mass }} kg</span>
+            <p id="fat_mass">{{fat_status}}</p>
+        </div>
+        
+        <div class="metric-card">
+            <strong>Lean Body Mass</strong>
+            <span>{{ lean_body_mass }} kg</span>
+        </div>
+
+        <div class="metric-card">
+            <strong>Standard Weight</strong>
+            <span>{{ standard_weight }} kg</span>
+        </div>
+
+        <div class="metric-card">
+            <strong>Weight Control</strong>
+            <span>{{ weight_control }} kg</span>
+        </div>
+
+        <div class="metric-card">
+            <strong>Musule Mass</strong>
+            <span>{{ muscle_mass }} kg</span>
+        </div>
+
+        <div class="metric-card">
+            <strong>Bone Mass</strong>
+            <span>{{ bone_mass }} kg</span>
+        </div>
+
+    </div>
+</div>
+
+<style>
+.metrics-container {
+    padding: 2rem;
+    background:whitesmoke;
+    color: #fff;
+    width: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.title {
+    text-align: center;
+    font-size: 2.4rem;
+    margin-bottom: 2rem;
+    font-weight: bold;
+    color: #0c0c0c;
+}
+
+.metrics-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: space-between;
+}
+
+.metric-card {
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background-color: rgb(249, 242, 242);
+    color: #070707;
+    border-radius: 16px;
+    padding: 1.5rem;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    width: 23%;
+}
+.metric-card:hover {
+    transform: translateY(-5px);
+}
+
+.metric-card strong {
+    display: block;
+    font-size: 1.1rem;
+    color: #0a0a0a;
+    margin-bottom: 0.3rem;
+}
+
+.metric-card span {
+    font-size: 1rem;
+    color: #060606;
+}
+p{
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.tooltip {
+    display: none;
+    position: absolute;
+    bottom: 110px;
+    left: 10px;
+    right: 10px;
+    background-color: rgba(249, 247, 247, 0.8);
+    padding: 0.6rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: #070707;
+    text-align: center;
+    z-index: 10;
+    pointer-events: none;
+    white-space: normal;
+}
+
+.metric-card:hover .tooltip {
+    display: block;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .metric-card {
+        flex: 1 1 calc(50% - 1rem);
+    }
+}
+
+@media (max-width: 480px) {
+    .metric-card {
+        flex: 1 1 100%;
+    }
+}
+</style>
+<script>
+    // Weight
+    const weight=document.getElementById("weight");
+    const weight_status=weight.textContent.trim();
+    if (weight_status=="Thin"){
+        weight.style.color="blue";
+    }
+    else if(weight_status=="Overweight"){
+        weight.style.color="red"
+    }
+    else{
+        weight.style.color="green"
+    }
+    //BMI
+    const bmi=document.getElementById("bmi");
+    const bmi_status=bmi.textContent;
+    if (bmi_status=="Overweight"){
+        bmi.style.color="red";
+    }
+    else if(bmi_status=="Obese"){
+        bmi.style.color="blue";
+    }
+    else{
+        bmi.style.color="green";
+    }
+    //Body fat %
+    const fat=document.getElementById('fat_p')
+    const fat_status=fat.textContent;
+    if (fat_status=="Low"){
+        fat.style.color="blue";
+    }
+    else if(fat_status=="Standard"){
+        fat.style.color="green";
+    }
+    else{
+        fat.style.color="red";
+    }
+    //Moisture
+    const moisture=document.getElementById("moisture");
+    const moisture_status=moisture.textContent;
+    if (moisture_status=="Low"){
+         moisture.style.color="blue"
+    }
+    else if(moisture_status=="Standard"){
+         moisture.style.color="green"
+    }
+    else{
+         moisture.style.color="red"
+    }
+    //BMR
+    const bmr=document.getElementById("bmr");
+    const bmr_status=bmr.textContent;
+    if (bmr_status=="Low"){
+         bmr.style.color="blue"
+    }
+    else if(bmr_status=="Normal"){
+         bmr.style.color="green"
+    }
+    else{
+         bmr.style.color="red"
+    }
+    //VFI
+    const vfi=document.getElementById("vfi");
+    const vfi_status=vfi.textContent;
+    if (vfi_status=="Low"){
+        vfi.style.color="blue";
+    }
+    else if (vfi_status=="Normal"){
+        vfi.style.color="green";
+    }
+    else{
+        vfi.style.color="red";
+    }
+    //Fat Mass
+    const fat_mass=document.getElementById("fat_mass");
+    const fat_mass_status=fat_mass.textContent;
+    if (fat_mass_status=="Low"){
+        fat_mass.style.color="blue";
+    }
+    else if (fat_mass_status=="Standard"){
+        fat_mass.style.color="green";
+    }
+    else{
+        fat_mass.style.color="red";
+    }
+</script>
+{% endblock %}

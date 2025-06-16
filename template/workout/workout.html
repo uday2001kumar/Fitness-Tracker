@@ -1,0 +1,163 @@
+{% extends 'workout/base_work.html' %}
+{% load static %}
+{% block content %}
+
+<!-- VIDEO Background -->
+<div class="video-background">
+    <video autoplay muted loop playsinline>
+        <source src="{% static 'images/Workouts/workout1.mp4' %}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+</div>
+
+<!-- Workout Section (on top of video) -->
+<div class="workout-section">
+    <h2>Workout Categories</h2>
+
+    <div class="workout-container">
+        <!-- Weight Loss -->
+        <div class="workout-box">
+            <img src="{% static 'images/Workouts/weight_loss.webp' %}" alt="Weight Loss Workout">
+            <h3 class="loss-title">Weight Loss</h3>
+            <p>Burn fat, boost metabolism, and stay fit with high-intensity workouts.</p>
+            <a href="{% url 'weight_loss' %}" class="btn-explore weight-loss">Explore</a>
+        </div>
+
+        <!-- Weight Gain -->
+        <div class="workout-box">
+            <img src="{% static 'images/Workouts/weight_gain.webp' %}" alt="Weight Gain Workout">
+            <h3 class="gain-title">Weight Gain</h3>
+            <p>Build muscle, increase strength, and achieve a powerful physique.</p>
+            <a href="{% url 'weight_gain' %}" class="btn-explore weight-gain">Explore</a>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Fullscreen Video Background */
+.video-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.video-background video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Workout Section */
+.workout-section {
+    position: relative;
+    z-index: 2;
+    padding: 60px 20px;
+    min-height: 100vh;
+    text-align: center;
+    color: white;
+    background: rgba(0, 0, 0, 0.4); /* semi-transparent overlay */
+}
+
+/* Section Title */
+.workout-section h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    background: linear-gradient(to right, #ffcc00, #ff9900);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 40px;
+}
+
+/* Workout Cards Container */
+.workout-container {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    padding: 0 20px;
+}
+
+/* Workout Card */
+.workout-box {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 20px;
+    width: 280px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+}
+
+.workout-box:hover {
+    transform: translateY(-10px);
+}
+
+.workout-box img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.workout-box h3 {
+    font-size: 1.5rem;
+    color: #fff;
+}
+
+.workout-box p {
+    font-size: 1rem;
+    color: #eee;
+    margin-bottom: 20px;
+}
+
+/* Buttons */
+.btn-explore {
+    display: inline-block;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: 0.3s ease;
+}
+
+/* Weight Loss Button */
+.weight-loss {
+    background: #ff5252;
+    color: white;
+}
+
+.weight-loss:hover {
+    background: #e53935;
+    transform: scale(1.05);
+}
+
+/* Weight Gain Button */
+.weight-gain {
+    background: #4caf50;
+    color: white;
+}
+
+.weight-gain:hover {
+    background: #388e3c;
+    transform: scale(1.05);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .workout-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .workout-box {
+        width: 90%;
+    }
+}
+</style>
+{% endblock %}

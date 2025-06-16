@@ -1,0 +1,151 @@
+{% extends 'nutrition/nutrition_base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+  /* Main container */
+  .main-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;  /* Full viewport height */
+    background: url('{% static "images/nutritions/img4.jpg" %}') no-repeat center center/cover;
+    background-size: cover;
+    padding: 40px;
+    /* border-radius: 15px; */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    flex-direction: column; /* Ensure content is stacked vertically */
+    text-align: center;
+  }
+
+  /* Content inside the main container */
+  .main-content {
+    /* background: rgba(0, 0, 0, 0.5); Semi-transparent overlay */
+    padding: 40px;
+    color: #fff;
+    border-radius: 15px;
+    max-width: 90%; /* Limit the width for better layout */
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  }
+
+  .main-content h2 {
+    font-size: 2.5rem;
+    color: #ffcc00;
+    margin-bottom: 1rem;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  .main-content p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    color: #f0f0f0;
+    line-height: 1.8;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Explore card container */
+  .explore-cards {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+
+  /* Individual explore card */
+  .explore-card {
+    background: rgba(255, 255, 255, 0.956); /* Semi-transparent background */
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 20px;
+    max-width: 320px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+  }
+
+  .explore-card img {
+    width: 100%;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    border-bottom: 4px solid #ffcc00;
+  }
+
+  .explore-card-content {
+    padding: 20px;
+    text-align: center;
+  }
+
+  .explore-card h2 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 15px;
+    font-weight: bold;
+  }
+
+  .explore-card p {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+
+  .explore-card a {
+    display: inline-block;
+    text-decoration: none;
+    background-color: #ffcc00;
+    color: #333;
+    padding: 12px 24px;
+    font-weight: bold;
+    border-radius: 30px;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  }
+
+  .explore-card a:hover {
+    background-color: #e6b800;
+    transform: translateY(-5px);
+  }
+
+  @media (max-width: 768px) {
+    .main-content {
+      max-width: 100%;
+    }
+
+    .explore-cards {
+      flex-direction: column; /* Stack cards vertically on smaller screens */
+      align-items: center;
+    }
+  }
+</style>
+
+<div class="main-container">
+  <div class="main-content">
+    <!-- Explore Cards -->
+    <div class="explore-cards">
+      <div class="explore-card">
+        <img src="{% static 'images/uday.jpg' %}" alt="Weight Loss Plan">
+        <div class="explore-card-content">
+          <h2>🥗 Weight Loss Plan</h2>
+          <p>Discover nutrient-packed, low-calorie meals to help you shed those extra pounds and stay healthy.</p>
+          <a href="{% url 'food_weight_loss' %}">Explore Now →</a>
+        </div>
+      </div>
+
+      <div class="explore-card">
+        <img src="{% static 'images/uday.jpg' %}" alt="Weight Gain Plan">
+        <div class="explore-card-content">
+          <h2>🍗 Weight Gain Plan</h2>
+          <p>Explore high-protein, nutrient-dense meals to help you gain healthy weight and build muscle.</p>
+          <a href="{% url 'food_weight_gain' %}">Explore Now →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

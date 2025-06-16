@@ -1,0 +1,185 @@
+{% extends 'nutrition/nutrition_base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="nutrition-bg">
+    <div class="add-workout-form">
+        <h2>Add Nutrition</h2>
+
+        {% if messages %}
+            {% for i in messages %}
+                <p class="success-msg">{{ i }} ✅</p>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <label for="goal_type">Goal Type:</label>
+            <select name="goal_type" required>
+                <option value="">-- Select Goal Type --</option>
+                <option value="Weight Loss">Weight Loss</option>
+                <option value="Weight Gain">Weight Gain</option>
+            </select>
+
+            <label for="food_item">Food Item:</label>
+            <select name="food_item" required>
+                <option value="">-- Select Food Item --</option>
+                <optgroup label="Weight Loss">
+                    {% for item in weight_loss_nutritions %}
+                        <option value="{{ item.name }}">{{ item.name }}</option>
+                    {% empty %}
+                        <option disabled>No Weight Loss Foods</option>
+                    {% endfor %}
+                </optgroup>
+                <optgroup label="Weight Gain">
+                    {% for item in weight_gain_nutritions %}
+                        <option value="{{ item.name }}">{{ item.name }}</option>
+                    {% empty %}
+                        <option disabled>No Weight Gain Foods</option>
+                    {% endfor %}
+                </optgroup>
+            </select>
+
+            <label for="servings">Servings:</label>
+            <input type="number" step="0.1" name="servings" placeholder="eg.4.5" required>
+
+            <label for="date_added">Date:</label>
+            <input type="date" name="date_added" required>
+
+            <button type="submit">Save Nutrition</button>
+        </form>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const goalTypeSelect = document.querySelector("select[name='goal_type']");
+        const foodSelect = document.querySelector("select[name='food_item']");
+        const optgroups = foodSelect.querySelectorAll("optgroup");
+
+        function filterFoodOptions() {
+            const selectedGoal = goalTypeSelect.value;
+
+            optgroups.forEach(group => {
+                if (selectedGoal === "") {
+                    group.style.display = "block"; // Show all if no selection
+                } else {
+                    group.style.display = (group.label === selectedGoal) ? "block" : "none";
+                }
+            });
+
+            // Reset food item selection when goal type changes
+            foodSelect.selectedIndex = 0;
+        }
+
+        goalTypeSelect.addEventListener("change", filterFoodOptions);
+        filterFoodOptions(); // Initial call to set correct visibility
+    });
+</script>
+
+<style>
+    /* Background */
+    .nutrition-bg {
+        background: url("{% static 'images/nutritions/img2.jpg' %}") no-repeat center center fixed;
+        background-size: cover;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    /* Glassmorphism Card */
+    .add-workout-form {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        padding: 30px;
+        border-radius: 20px;
+        width: 100%;
+        max-width: 500px;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
+        font-family: 'Segoe UI', sans-serif;
+        color: #fff;
+    }
+
+    .add-workout-form h2 {
+        text-align: center;
+        font-size: 28px;
+        margin-bottom: 20px;
+        font-weight: bold;
+    }
+
+    .add-workout-form label {
+        display: block;
+        margin-top: 15px;
+        font-size: 15px;
+        font-weight: 600;
+    }
+
+    .add-workout-form input,
+    .add-workout-form select {
+        width: 100%;
+        padding: 12px;
+        margin-top: 8px;
+        border-radius: 12px;
+        border: none;
+        background-color: rgba(255, 255, 255, 0.8);
+        color: #000;
+        font-size: 15px;
+        box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+        transition: 0.3s;
+    }
+
+    .add-workout-form input:focus,
+    .add-workout-form select:focus {
+        outline: none;
+        background-color: #fff;
+        box-shadow: 0 0 8px #4caf50;
+    }
+
+    .add-workout-form button {
+        margin-top: 25px;
+        width: 100%;
+        padding: 12px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .add-workout-form button:hover {
+        background-color: #388e3c;
+    }
+
+    .success-msg {
+        color: #00ff77;
+        text-align: center;
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    @media (max-width: 600px) {
+        .add-workout-form {
+            padding: 20px;
+        }
+
+        .add-workout-form h2 {
+            font-size: 24px;
+        }
+
+        .add-workout-form label,
+        .add-workout-form input,
+        .add-workout-form select,
+        .add-workout-form button {
+            font-size: 14px;
+        }
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends 'workout/base_work.html' %}
+{% load static %}
+{% block content %}
+<div class="chart-bg">
+    <!-- Background Video -->
+    <video autoplay muted loop>
+        <source src="{% static 'images/Workouts/workout5.mp4' %}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <div class="chart-glass">
+        <h2>Calories Burned in the Last 7 Days</h2>
+        <div class="chart-container">
+            <img src="data:image/png;base64,{{ chart_data }}" alt="Weekly Chart">
+        </div>
+    </div>
+</div>
+
+<style>
+/* Background setup with video */
+.chart-bg {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    overflow: hidden;
+}
+
+.chart-bg video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+/* Glass effect container */
+.chart-glass {
+    border-radius: 20px;
+    padding: 30px 40px;
+    max-width: 800px;
+    width: 100%;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    color: #fff;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Heading */
+.chart-glass h2 {
+    font-size: 32px;
+    margin-bottom: 25px;
+    color: #ffcc00;
+}
+
+/* Chart container and image */
+.chart-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.9;
+}
+
+.chart-container img {
+    max-width: 100%;
+    height: auto;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+    border: 3px solid #ffcc00;
+    border-radius: 12px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .chart-glass {
+        padding: 20px;
+    }
+
+    .chart-glass h2 {
+        font-size: 24px;
+    }
+}
+</style>
+{% endblock %}

@@ -1,0 +1,164 @@
+{% extends 'admin/admin_base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="modern-profile-wrapper">
+    <div class="modern-profile-card">
+        <div class="modern-profile-left">
+            {% if user_view.photo %}
+                <img src="{{ user_view.photo.url }}" alt="User Photo" class="user-photo">
+            {% else %}
+                <img src="{% static 'images/default_user.png' %}" alt="Default User" class="user-photo">
+            {% endif %}
+            <h2>{{ user_view.username }}</h2>
+            <p class="email">{{ user_view.email }}</p>
+        </div>
+
+        <div class="modern-profile-right">
+            <div class="info-box">
+                <h3>User Details</h3>
+                {% if user_view.name %}
+                    <p><strong>Full Name:</strong> {{ user_view.name }}</p>
+                {% endif %}
+                {% if user_view.gender %}
+                    <p><strong>Gender:</strong> {{ user_view.gender }}</p>
+                {% endif %}
+                {% if user_view.date_of_birth %}
+                    <p><strong>Date of Birth:</strong> {{ user_view.date_of_birth|date:"d M Y" }}</p>
+                {% endif %}
+                {% if user_view.height %}
+                    <p><strong>Height:</strong> {{ user_view.height }} cm</p>
+                {% endif %}
+                {% if user_view.weight %}
+                    <p><strong>Weight:</strong> {{ user_view.weight }} kg</p>
+                {% endif %}
+                <p><strong>Date Joined:</strong> {{ user_view.date_joined|date:"d M Y H:i" }}</p>
+                {% if not user_view.name and not user_view.gender and not user_view.date_of_birth and not user_view.height and not user_view.weight %}
+                    <p>No additional user details available.</p>
+                {% endif %}
+            </div>
+            <div class="action-buttons">
+                <a href="javascript:history.back()" class="btn back">Back</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f3f6f9;
+    color: #333;
+}
+
+.modern-profile-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Keep the profile centered */
+    padding: 50px 20px;
+    min-height: 100vh;
+    background-color: #e6f7ff;
+}
+
+.modern-profile-card {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: flex-start; /* No stretching */
+    flex-wrap: wrap;
+    width: 720px; /* Fixed width to prevent stretching */
+    padding: 20px;
+    gap: 20px;
+}
+
+.modern-profile-left,
+.modern-profile-right {
+    background: #ffffff;
+    padding: 30px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.modern-profile-left {
+    flex: 1;
+    max-width: 280px;
+    text-align: center;
+}
+
+.user-photo {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid #3498db;
+    margin-bottom: 20px;
+    box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
+}
+
+.modern-profile-left h2 {
+    margin-bottom: 10px;
+    font-size: 1.8rem;
+    color: #2c3e50;
+}
+
+.email {
+    font-size: 0.95rem;
+    color: #7f8c8d;
+}
+
+.modern-profile-right {
+    flex: 2;
+    min-width: 0;
+}
+
+.info-box h3 {
+    margin-bottom: 15px;
+    font-size: 1.4rem;
+    color: #2980b9;
+    border-bottom: 2px solid #2980b9;
+    padding-bottom: 8px;
+}
+
+.info-box p {
+    margin: 12px 0;
+    font-size: 1rem;
+    color: #555;
+}
+
+.action-buttons {
+    margin-top: 20px;
+}
+
+.action-buttons .btn {
+    text-decoration: none;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-weight: bold;
+    color: #fff;
+    display: inline-block;
+    min-width: 140px;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.action-buttons .btn.back {
+    background-color: #f39c12;
+}
+
+.action-buttons .btn.back:hover {
+    background-color: #e67e22;
+}
+
+/* Responsive for smaller screens */
+@media (max-width: 768px) {
+    .modern-profile-card {
+        width: 100%; /* For mobile, allow full width */
+    }
+}
+</style>
+
+{% endblock %}

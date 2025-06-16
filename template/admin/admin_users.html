@@ -1,0 +1,217 @@
+{% extends 'admin/admin_base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center fw-bold mb-4" style="color: #ff6600;text-align: center;">👥 Manage Users</h2>
+
+    <!-- Search Bar -->
+    <div class="search-bar">
+        <input type="text" id="userSearch" class="form-control" placeholder="Search by Name..." onkeyup="filterUsers()">
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert" style="text-align: center;font-size: 20px;margin: 20px;">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% if users %}
+        <div class="grid-wrapper" id="userList">
+            {% for user in users %}
+                <div class="user-card">
+                    <div class="user-img-wrapper">
+                        {% if user.photo %}
+                            <img src="{{ user.photo.url }}" alt="User" class="user-img">
+                        {% else %}
+                            <img src="{% static 'images/default_user.png' %}" alt="Default" class="user-img">
+                        {% endif %}
+                    </div>
+                    <div class="user-info">
+                        <h5 class="username">{{ user.username }}</h5>
+                        <p><strong>Name:</strong> {{ user.name }}</p>
+                        <p><strong>Age:</strong> {{ user.age }}</p>
+
+                        <div class="btn-group">
+                            <a href="{% url 'admin_view_user' pk=user.id %}" class="btn-view">View</a>
+                            <a href="{% url 'admin_delete_user' pk=user.id %}" class="btn-delete"
+                               onclick="return confirm('Are you sure you want to delete {{ user.username }}?')">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-center text-muted">No users available.</p>
+    {% endif %}
+</div>
+
+<style>
+body {
+    background: #d2e2f3;  /* Light blue background */
+    color: #4a4a4a;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+
+.search-bar {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.search-bar input {
+    width: 80%;
+    max-width: 500px;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ff6600;
+    box-shadow: 0 0 6px rgba(255, 102, 0, 0.2);
+    margin: 0 auto;
+}
+
+.grid-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    justify-items: center;  /* Ensure the cards do not stretch to full width */
+}
+
+.user-card {
+    background: rgba(254, 252, 252, 0.942);
+    border-radius: 16px;
+    color: black;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #e0e0e0;
+    width: 280px;  /* Fix width to maintain consistency */
+}
+
+.user-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+}
+
+.user-img-wrapper {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.user-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid #ff6600;
+    object-fit: cover;
+    box-shadow: 0 0 12px rgba(255, 102, 0, 0.6);
+}
+
+.user-info {
+    text-align: center;
+}
+
+.username {
+    color: #ff6600;
+    font-weight: 600;
+    margin-bottom: 10px;
+    font-size: 1.3rem;
+}
+
+.btn-group {
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 15px;
+}
+
+.btn-view, .btn-delete {
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    text-decoration: none;
+}
+
+.btn-view {
+    background-color: #28a745;
+    border: 1px solid #28a745;
+    color: white;
+}
+
+.btn-view:hover {
+    background-color: #218838;
+    color: white;
+}
+
+.btn-delete {
+    background-color: #ff4747;
+    border: 1px solid #ff4747;
+    color: rgb(248, 245, 245);
+}
+
+.btn-delete:hover {
+    background-color: #e63946;
+    color: white;
+    box-shadow: 0 0 10px rgba(230, 57, 70, 0.6);
+}
+
+h2 {
+    color: #ff6600;
+}
+
+.alert {
+    background-color: #e1f5fe;
+    color: #00796b;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.alert-dismissible .btn-close {
+    color: #00796b;
+    background-color: transparent;
+    border: none;
+}
+
+.alert-dismissible .btn-close:hover {
+    background-color: #00796b;
+}
+
+/* Ensure no stretching on smaller screens */
+@media (max-width: 768px) {
+    .grid-wrapper {
+        grid-template-columns: 1fr; /* Single column for small screens */
+    }
+
+    .user-card {
+        width: 100%; /* Allow user card to take full width on mobile */
+    }
+}
+</style>
+
+<script>
+    // Filter users based on the search input
+    function filterUsers() {
+        let input = document.getElementById('userSearch');
+        let filter = input.value.toLowerCase();
+        let userList = document.getElementById('userList');
+        let userCards = userList.getElementsByClassName('user-card');
+
+        for (let i = 0; i < userCards.length; i++) {
+            let userInfo = userCards[i].getElementsByClassName('user-info')[0];
+            let name = userInfo.getElementsByClassName('username')[0].textContent.toLowerCase();
+            
+            if (name.indexOf(filter) > -1) {
+                userCards[i].style.display = '';
+            } else {
+                userCards[i].style.display = 'none';
+            }
+        }
+    }
+</script>
+
+{% endblock %}

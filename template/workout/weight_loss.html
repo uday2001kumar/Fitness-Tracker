@@ -1,0 +1,105 @@
+{% extends 'workout/base_work.html' %}
+{% load static %}
+{% block content %}
+
+<div class="workout-section">
+    <div class="header-text">
+        <h2>Weight Loss Workouts</h2>
+    </div>
+
+    <div class="workout-grid-modern">
+        {% for workout in workout_loss %}
+            <div class="workout-card-modern">
+                <img src="{{ workout.image.url }}" alt="{{ workout.workout_name }}">
+                <h3>{{ workout.workout_name }}</h3>
+                <p>{{ workout.description }}</p>
+            </div>
+        {% empty %}
+            <p class="empty-msg">No weight loss workouts available.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+body {
+    background: linear-gradient(to right, #f2f7ff, #e0f0ff);
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.workout-section {
+    padding: 60px 20px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.header-text h2 {
+    text-align: center;
+    font-size: 36px;
+    color: #333;
+    font-weight: 700;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.header-text h2::after {
+    content: '';
+    width: 60px;
+    height: 4px;
+    background: #ffcc00;
+    display: block;
+    margin: 12px auto 0;
+    border-radius: 2px;
+}
+
+.workout-grid-modern {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 30px;
+}
+
+.workout-card-modern {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.workout-card-modern:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
+}
+
+.workout-card-modern img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 15px;
+}
+
+.workout-card-modern h3 {
+    font-size: 20px;
+    color: #222;
+    margin-bottom: 10px;
+}
+
+.workout-card-modern p {
+    font-size: 15px;
+    color: #555;
+    line-height: 1.5;
+}
+
+.empty-msg {
+    text-align: center;
+    color: #999;
+    font-size: 18px;
+    margin-top: 40px;
+    font-weight: 500;
+}
+</style>
+
+{% endblock %}

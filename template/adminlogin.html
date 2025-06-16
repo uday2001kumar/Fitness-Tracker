@@ -1,0 +1,125 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #cce2ff, #e0f7fa);
+  }
+
+  .admin-hero {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+
+  .admin-card {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 40px 30px;
+    max-width: 420px;
+    width: 100%;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    border: 1px solid #e0e0e0;
+  }
+
+  .admin-card h3 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 28px;
+    font-weight: 600;
+  }
+
+  .admin-card label {
+    color: #555;
+    font-weight: 500;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .admin-card input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    background-color: #f7f9fc;
+    font-size: 15px;
+    color: #333;
+    outline: none;
+  }
+
+  .admin-card input:focus {
+    border-color: #89b9ff;
+    background-color: #fff;
+  }
+
+  .admin-card button {
+    width: 100%;
+    padding: 12px;
+    background: #0d2f6a;
+    color: #fff;
+    font-weight: bold;
+    font-size: 16px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s ease;
+  }
+
+  .admin-card button:hover {
+    background: #0d2f6ae1;
+  }
+
+  .admin-card p {
+    color: #555;
+    font-size: 14px;
+    text-align: center;
+    margin-top: 15px;
+  }
+
+  .text-danger {
+    color: #d32f2f;
+    font-weight: 500;
+    text-align: center;
+  }
+
+  @media (max-width: 500px) {
+    .admin-card {
+      padding: 30px 20px;
+    }
+  }
+</style>
+
+<div class="admin-hero">
+  <div class="admin-card">
+    <h3>Admin Login</h3>
+    {% if messages %}
+      {% for i in messages %}
+        <p style="color: #333; font-size: 16px; text-align: center;">{{ i }}</p>
+      {% endfor %}
+    {% endif %}
+    <form method="POST">
+      {% csrf_token %}
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" placeholder="Enter Username" required>
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="Enter Password" required>
+
+      <button type="submit">Login</button>
+
+      {% if error %}
+        <p class="text-danger mt-3">{{ error }}</p>
+      {% endif %}
+    </form>
+  </div>
+</div>
+{% endblock %}

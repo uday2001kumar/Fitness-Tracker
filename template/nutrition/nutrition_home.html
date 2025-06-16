@@ -1,0 +1,122 @@
+{% extends 'nutrition/nutrition_base.html' %}
+{% load static %}
+{% block content %}
+<style>
+    body {
+        background: linear-gradient(135deg, #1e2a47, #253b64, #3e4d76); /* Darker shades */
+        margin: 0;
+        padding: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #f0f0f0;
+    }
+
+    h1 {
+        font-size: 3rem;
+        text-align: center;
+        color: #e74c3c; /* Vibrant Red */
+        font-weight: 900;
+        margin-bottom: 2.5rem;
+        letter-spacing: 1.5px;
+    }
+
+    h3 {
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: #ffffff;
+    }
+
+    p {
+        font-size: 1.1rem;
+        font-weight: 500;
+        margin: 0;
+        color: #f1f1f1;
+    }
+
+    .dashboard-flex {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        justify-content: center;
+        margin: 0 3rem 3rem;
+    }
+
+    .card {
+        flex: 1 1 240px;
+        border-radius: 20px;
+        padding: 1.8rem;
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        background: rgba(255, 255, 255, 0.15);
+        box-shadow: 0 8px 28px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
+    }
+
+    .card1 { border-left: 8px solid #e74c3c; background: #e74c3c; }  /* Red */
+    .card2 { border-left: 8px solid #16a085; background: #16a085; }  /* Teal */
+    .card3 { border-left: 8px solid #f39c12; background: #f39c12; }  /* Orange */
+    .card4 { border-left: 8px solid #2980b9; background: #2980b9; }  /* Blue */
+    .card5 { border-left: 8px solid #8e44ad; background: #8e44ad; }  /* Purple */
+    .card6 { border-left: 8px solid #f39c12; background: #f39c12; }  /* Orange */
+
+    @media (max-width: 768px) {
+        .dashboard-flex {
+            margin: 0 1rem;
+        }
+
+        .card {
+            flex: 1 1 100%;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+        }
+    }
+</style>
+
+<h1>🥦 Nutrition Dashboard</h1>
+
+<div class="dashboard-flex">
+    <div class="card card1">
+        <h3>🥗 Total Nutrition Logs</h3>
+        <p>{{ total_nutritions }}</p>
+    </div>
+
+    <div class="card card2">
+        <h3>✅ Consumed Today</h3>
+        <p>{{ consumed_today }}</p>
+    </div>
+
+    <div class="card card3">
+        <h3>🔥 Calories Consumed</h3>
+        <p>{{ calories_consumed_today }} kcal</p>
+    </div>
+
+    <div class="card card4">
+        <h3>🎯 Goal</h3>
+        <p>{{ calories_consumed_today }}/2500 kcal</p>
+    </div>
+
+    <div class="card card6">
+        <h3>🗓️ Date</h3>
+        <p>{{ today|date:"F j, Y" }}</p>
+    </div>
+</div>
+
+<div class="dashboard-flex">
+    <div class="card card5">
+        <h3>🍴 Total Meals</h3>
+        <p>{{ total_meals_today }}</p>
+        <p>{{ nutrition_type_today }}</p>
+        <h3 style="margin-top: 1rem;">⚖️ Avg. Calories / Meal</h3>
+        <p>{{ avg_calories }} kcal</p>
+    </div>
+</div>
+
+{% endblock %}

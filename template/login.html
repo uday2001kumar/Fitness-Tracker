@@ -1,0 +1,139 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background: #f0f0f0;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .login-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+    }
+
+    .login-card {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 40px 35px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        max-width: 400px;
+        width: 100%;
+        transition: all 0.3s ease;
+    }
+
+    .login-card h2 {
+        text-align: center;
+        font-size: 28px;
+        margin-bottom: 25px;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .login-card label {
+        display: block;
+        font-weight: 500;
+        margin-bottom: 6px;
+        font-size: 15px;
+        color: #555;
+    }
+
+    .login-card input {
+        width: 100%;
+        padding: 12px 14px;
+        margin-bottom: 18px;
+        border-radius: 10px;
+        border: 1px solid #ccd6dd;
+        font-size: 15px;
+        color: #333;
+        background-color: #f9f9f9;
+        outline: none;
+        transition: 0.3s border;
+    }
+
+    .login-card input:focus {
+        border-color: #7fafff;
+        background-color: #fff;
+    }
+
+    .login-card button {
+        width: 100%;
+        padding: 12px;
+        background: #0d2f6a;
+        color: #fff;
+        font-weight: 600;
+        font-size: 16px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+    .login-card button:hover {
+        background: #0d2f6ad1;
+    }
+
+    .login-card p {
+        text-align: center;
+        margin-top: 15px;
+        font-size: 14px;
+        color: #666;
+    }
+
+    /* Remove extra space after the last paragraph (Forgot Password link) */
+    .login-card p:last-child {
+        margin-top: 0;
+    }
+
+    .login-card a {
+        color: #5e98f5;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .login-card a:hover {
+        text-decoration: underline;
+    }
+
+    .error-msg {
+        color: #e74c3c;
+        font-weight: 500;
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    @media (max-width: 500px) {
+        .login-card {
+            padding: 30px 20px;
+        }
+    }
+</style>
+
+<div class="login-wrapper">
+    <div class="login-card">
+        <h2>Login</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <p class="error-msg">{{ msg }}</p>
+            <div>
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+            </div>
+            <div>
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+            <button type="submit">Login</button>
+            <p>Don't have an account? <a href="{% url 'signup' %}">Signup</a></p>
+            <p><a href="{% url 'forget_Password' %}">Forgot Password?</a></p>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

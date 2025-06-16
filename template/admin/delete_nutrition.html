@@ -1,0 +1,145 @@
+{% extends 'admin/admin_base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="glass-container">
+    <h2 class="page-title text-glow">🗑️ Delete Nutrition Items</h2>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="nutrition-grid">
+        {% for item in nutritions %}
+        <div class="nutrition-card glassy-card">
+            <div class="img-box">
+                {% if item.image %}
+                    <img src="{{ item.image.url }}" alt="{{ item.food_name }}">
+                {% else %}
+                    <div class="no-img">No Image</div>
+                {% endif %}
+            </div>
+            <h3>{{ item.food_name }}</h3>
+            <p><strong>Category:</strong> {{ item.nutrition_type }}</p>
+            <p><strong>Calories:</strong> {{ item.calories_per_serving }} kcal / 100g</p>
+            <p class="desc">{{ item.description }}</p>
+            <a href="{% url 'Admin_Delete_Nutrition' item.pk %}" class="delete-btn">Delete</a>
+        </div>
+        {% empty %}
+        <p class="text-muted text-center mt-4">No nutrition items available.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+body {
+    /* Updated background to Cyan color */
+    background-color: #ffe6e6;  /* Cyan */
+    /* If you want to keep the gradient effect with Cyan */
+    /* background: linear-gradient(135deg, #00bcd4, #00acc1, #0097a7); */
+    font-family: 'Segoe UI', sans-serif;
+    color: #ffffff;
+}
+
+.text-glow {
+    color: #000000;
+    text-shadow: 0 0 15px #00ffcc;  /* Cyan glow */
+}
+
+.glass-container {
+    max-width: 1300px;
+    margin: 40px auto;
+    padding: 20px;
+    text-align: center;
+}
+
+.page-title {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+.nutrition-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
+    justify-content: center;
+}
+
+.glassy-card {
+    width: 300px;
+    border-radius: 20px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.886);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 18px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.glassy-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+}
+
+.img-box img,
+.no-img {
+    width: 100%;
+    height: 170px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 12px;
+}
+
+.no-img {
+    background: #1f2937;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #080808;
+    font-size: 15px;
+    height: 170px;
+    border-radius: 12px;
+}
+
+.glassy-card h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #000000;
+    margin-bottom: 8px;
+}
+
+.glassy-card p {
+    font-size: 14px;
+    margin: 4px 0;
+    color: #030303;
+}
+
+.desc {
+    font-size: 13px;
+    margin-top: 6px;
+    color: #a7ffeb;
+    text-align: justify;
+}
+
+.delete-btn {
+    display: inline-block;
+    margin-top: 14px;
+    padding: 8px 20px;
+    background: linear-gradient(135deg, #00c853, #64dd17);
+    color: white;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.3s ease;
+}
+
+.delete-btn:hover {
+    background: linear-gradient(135deg, #00e676, #00c853);
+}
+</style>
+{% endblock %}

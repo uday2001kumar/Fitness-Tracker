@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness Dashboard</title>
+    <style>
+        :root {
+            --bg-main: #121212;
+            --sidebar-bg: #1e1e2f;
+            --accent: #4dd0e1;
+            --text-light: #e0f7fa;
+            --text-muted: #aaa;
+            --hover-bg: rgba(77, 208, 225, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-main);
+            color: var(--text-light);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        nav {
+            width: 250px;
+            background: var(--sidebar-bg);
+            backdrop-filter: blur(20px);
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 2px 0 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .profile-container {
+            text-align: center;
+        }
+
+        .profile-container img {
+            width: 90px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid var(--accent);
+            object-fit: cover;
+        }
+
+        .profile-container p {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 18px;
+            margin: 0.2rem 0;
+            border-radius: 10px;
+            color: var(--text-light);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .nav-link span {
+            font-size: 1.3rem;
+            margin-right: 10px;
+        }
+
+        .nav-link:hover {
+            background-color: var(--hover-bg);
+            color: var(--accent);
+            transform: translateX(5px);
+        }
+
+        /* Right content area */
+        .right {
+            margin-left: 250px;
+            padding:0;
+            width: calc(100% - 250px);
+            min-height: 100vh;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: row;
+                width: 100%;
+                height: auto;
+                position: static;
+                justify-content: space-around;
+                padding: 1rem;
+                box-shadow: none;
+            }
+
+            .profile-container {
+                display: none;
+            }
+
+            .nav-link {
+                font-size: 0.9rem;
+                padding: 10px;
+            }
+
+            .right {
+                margin-left: 0;
+                width: 100%;
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <nav>
+        <div class="profile-container">
+            {% if user.photo %}
+                <img src="{{ user.photo.url }}" alt="Profile Picture">
+            {% else %}
+                <img src="{% static 'images/default-profile.png' %}" alt="Default Picture">
+            {% endif %}
+            <p>{{ user.username }}</p>
+        </div>
+
+        <a href="{% url 'workouthome' %}" class="nav-link"><span>🏠</span> Home</a>
+        <a href="{% url 'workout' %}" class="nav-link"><span>🏋️‍♂️</span> Workouts</a>
+        <a href="{% url 'add_workout' %}" class="nav-link"><span>➕</span> Add Workout</a>
+        <a href="{% url 'view_past_workouts' %}" class="nav-link"><span>📅</span> Past Workouts</a>
+        <a href="{% url 'show_weekly_chart' %}" class="nav-link"><span>📈</span> Weekly Report</a>
+        <a href="{% url 'monthly_report_workouts' %}" class="nav-link"><span>📊</span> Monthly Report</a>
+        <a href="{% url 'suggession' %}" class="nav-link"><span>🧠</span> AI Doctor</a>
+        <a href="{% url 'compare' %}" class="nav-link"><span>⚖️</span> Compare</a>
+        <a href="{% url 'home' %}" class="nav-link"><span>⬅️</span> Back</a>
+    </nav>
+
+    <!-- Right Content -->
+    <div class="right">
+        {% block content %}
+        <!-- Page-specific content will appear here -->
+        {% endblock %}
+    </div>
+
+</body>
+</html>
